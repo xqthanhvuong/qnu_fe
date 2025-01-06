@@ -1,0 +1,90 @@
+<div class="rounded-4 w-100 h-100" style="position: relative">
+    <div class="loading-overlay" *ngIf="isLoading">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    <div class="d-flex align-items-center h-10 mb-2">
+        <div *ngIf="isActive('activity/add')" class="fs-4 fw-bold mb-2">
+            Activity
+        </div>
+        <div *ngIf="!isActive('activity/add')" class="fs-4 fw-bold mb-2">
+            Guide
+        </div>
+        <div class="mx-2">
+            <!-- SVG Icon -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M4.21948 3.09961C2.46948 3.09961 1.40953 5.01961 2.32953 6.50961L5.09949 10.9396C5.46949 11.5296 5.46949 12.4896 5.09949 13.0796L2.32953 17.5096C1.39953 18.9896 2.46948 20.9196 4.21948 20.9196H14.6695C15.2795 20.9196 16.0795 20.5196 16.4495 20.0296L21.6295 13.1296C22.0895 12.5196 22.1295 11.4896 21.7295 10.8496L17.5495 4.16961C17.1895 3.58961 16.3395 3.11961 15.6595 3.11961H8.65949" 
+                      stroke="#292D32" 
+                      stroke-width="1.5" 
+                      stroke-miterlimit="10" 
+                      stroke-linecap="round" 
+                      stroke-linejoin="round"/>
+            </svg>
+        </div>
+        <div class="fs-4 fw-bold" *ngIf="isActive('activity/add')">Add Activity</div>
+        <div class="fs-4 fw-bold" *ngIf="isActive('activity-guide/add')">Add Guide</div>
+        <div class="fs-4 fw-bold" *ngIf="isActive('department-guide/add')">Add department Guide</div>
+    </div>
+    <div class="card me-4">
+        <p-toast></p-toast>
+        <!-- Bootstrap Progress Bar -->
+        <div class="progress w-100 my-3" style="height: 1rem;">
+            <div class="progress-bar progress-bar-striped progress-bar-animated"
+                 role="progressbar"
+                 [attr.aria-valuenow]="totalSizePercent"
+                 aria-valuemin="0"
+                 aria-valuemax="100"
+                 [ngStyle]="{'width.%': totalSizePercent > 100 ? 100 : totalSizePercent}"
+                 [ngClass]="{'bg-danger': totalSizePercent > 100, 'bg-success': totalSizePercent <= 100}">
+            </div>
+            <span class="ms-2">{{ formatSize(totalSize) }} / 20Mb</span>
+        </div>
+        <p-fileUpload #fileUpload 
+                     name="myfile[]" 
+                     [multiple]="true" 
+                     accept="application/pdf" 
+                     maxFileSize="10000000" 
+                     [auto]="false" 
+                     (onSelect)="onSelectedFiles($event)" 
+                     (onRemove)="handleFileRemove($event)">
+        
+            <ng-template pTemplate="header" let-files let-chooseCallback="chooseCallback" let-clearCallback="clearCallback">
+                <div class="d-flex flex-wrap justify-content-between align-items-center flex-1 gap-2">
+                    <div class="d-flex gap-2">
+                        <!-- Nút chọn file -->
+                        <p-button (onClick)="choose($event, chooseCallback)" 
+                                  icon="pi pi-folder-open" 
+                                  [outlined]="true">
+                        </p-button>
+                        <!-- Nút upload file -->
+                        <p-button pTooltip="This button can create activity. Please choose activity guide." 
+                                  (onClick)="uploadFiles()" 
+                                  icon="pi pi-cloud-upload" 
+                                  [rounded]="true" 
+                                  [outlined]="true" 
+                                  severity="success" 
+                                  [disabled]="!files || files.length === 0">
+                        </p-button>
+                        <!-- Nút xóa file -->
+                        <p-button (onClick)="clearFiles(clearCallback)" 
+                                  icon="pi pi-times" 
+                                  [rounded]="true" 
+                                  [outlined]="true" 
+                                  severity="danger" 
+                                  [disabled]="!files || files.length === 0">
+                        </p-button>
+                    </div>
+                </div>
+            </ng-template>
+            
+            <ng-template pTemplate="empty">
+                <div class="d-flex w-100 align-items-center justify-content-center flex-column">
+                    <i class="pi pi-cloud-upload border border-1 rounded-circle fs-1 p-5"></i>
+                    <p class="mt-4 mb-0" *ngIf="isActive('activity/add')">Drag and drop files here to upload activity guide for new activity.</p>
+                    <p class="mt-4 mb-0" *ngIf="!isActive('activity/add')">Drag and drop files here to upload activity guide for activity.</p>
+                </div>
+            </ng-template>
+        </p-fileUpload>
+    </div>
+</div>

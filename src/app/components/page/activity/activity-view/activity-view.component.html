@@ -1,0 +1,201 @@
+<div class="rounded-4 w-100 h-100" style="position: relative">
+    <div class="d-flex justify-content-between me-4">
+      <div class="fs-4 fw-bold mb-2">Activity View</div>
+    </div>
+  
+    <div class="rounded-4 me-4" style="overflow: hidden; height: 90%">
+      <div class="table-responsive h-100" style="overflow-y: auto">
+        <div class="card">
+          <p-table
+            #dt2
+            [value]="activityViews"
+            dataKey="id"
+            sortField="studentCode"
+            [sortOrder]="-1"
+            [rows]="5"
+            [rowsPerPageOptions]="[5, 10, 50]"
+            [paginator]="true"
+            [globalFilterFields]="['studentCode', 'studentName']"
+            [tableStyle]="{ 'max-width': '100%' }"
+          >
+            <ng-template pTemplate="caption">
+              <div class="d-flex justify-content-between">
+                <p-iconField iconPosition="left" class="ml-auto">
+                  <p-inputIcon>
+                    <i class="pi pi-search"></i>
+                  </p-inputIcon>
+                  <input
+                    pInputText
+                    type="text"
+                    (input)="onSearch($event)"
+                    placeholder="Search keyword"
+                  />
+                </p-iconField>
+                <div>
+                    <button
+                    class="btn btn-outline-primary me-2 d-flex align-items-center justify-content-center"
+                    style="border-width: 1px"
+                    *ngIf="!isDetail"
+                    data-bs-toggle="modal"
+                    data-bs-target="#filterModal"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="currentColor"
+                      width="24px"
+                      height="24px"
+                      viewBox="-5.5 0 32 32"
+                      version="1.1"
+                      class="bi bi-funnel-fill me-2"
+                    >
+                      <title>filter</title>
+                      <path
+                        d="M8.48 25.72c-0.16 0-0.32-0.040-0.44-0.12-0.24-0.16-0.4-0.44-0.4-0.72v-8.72l-7.48-8.48c-0.2-0.24-0.28-0.6-0.12-0.88s0.44-0.48 0.76-0.48h19.8c0.32 0 0.64 0.2 0.76 0.48 0.12 0.32 0.080 0.64-0.12 0.92l-7.8 8.8v6.32c0 0.32-0.2 0.6-0.48 0.76l-4.080 2c-0.080 0.080-0.24 0.12-0.4 0.12zM2.64 7.96l6.48 7.32c0.12 0.16 0.2 0.36 0.2 0.56v7.64l2.4-1.2v-6.080c0-0.2 0.080-0.4 0.2-0.56l6.8-7.68c0.040 0-16.080 0-16.080 0z"
+                      />
+                    </svg>
+                    Filter
+                  </button>
+                </div>
+              </div>
+            </ng-template>
+  
+            <ng-template pTemplate="header">
+              <tr>
+                <th style="width: 20%">
+                  <p-columnFilter
+                    type="text"
+                    field="studentCode"
+                    placeholder="Search by code"
+                    ariaLabel="Filter Student Code"
+                  />
+                </th>
+                <th style="width: 30%">
+                  <p-columnFilter
+                    type="text"
+                    field="studentName"
+                    placeholder="Search by name"
+                    ariaLabel="Filter name"
+                  />
+                </th>
+                <th style="width: 0%"></th>
+                <th>
+                    <p-columnFilter type="boolean" field="readed" />
+                </th>
+              </tr>
+              <tr>
+                <th pSortableColumn="studentCode" style="width: 20%">
+                  Student Code <p-sortIcon field="studentCode" />
+                </th>
+                <th pSortableColumn="studentName" style="width: 40%">
+                  Student Name <p-sortIcon field="studentName" />
+                </th>
+                <th pSortableColumn="viewTime" style="width: 20%">
+                  View Time <p-sortIcon field="viewTime" />
+                </th>
+                <th pSortableColumn="readed" style="width: 10%">
+                  Is readed <p-sortIcon field="readed" />
+                </th>
+              </tr>
+            </ng-template>
+  
+            <ng-template pTemplate="body" let-activityView>
+              <tr>
+                <td>{{ activityView.studentCode }}</td>
+                <td>{{ activityView.studentName }}</td>
+                <td>{{ activityView.viewTime | date : "short" }}</td>
+                <td>
+                    <i class="pi" [ngClass]="{ 'text-green-500 pi-check-circle': activityView.readed, 'text-red-500 pi-times-circle': !activityView.readed }"></i>
+                </td>
+              </tr>
+            </ng-template>
+  
+            <ng-template pTemplate="emptymessage">
+              <tr>
+                <td colspan="4">No attendance record found.</td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <div
+  class="modal fade"
+  id="filterModal"
+  #filterModal
+  tabindex="-1"
+  aria-labelledby="filterModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="filterModalLabel">Select Filter</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <label for="department" class="form-label mb-0">Department</label>
+        <div class="mb-3">
+          <p-autoComplete
+            [(ngModel)]="selectedDepartment"
+            [dropdown]="true"
+            [suggestions]="filteredDepartments"
+            placeholder="Select Department"
+            (completeMethod)="filterDepartment($event)"
+            optionLabel="name"
+          />
+        </div>
+        <label for="course" class="form-label mb-0">Batch</label>
+        <div class="mb-3">
+          <p-autoComplete
+            [(ngModel)]="selectedCourse"
+            [dropdown]="true"
+            placeholder="Select Batch"
+            [suggestions]="filteredCourses"
+            (completeMethod)="filterCourse($event)"
+            optionLabel="name"
+          />
+        </div>
+        <label for="classes" class="form-label mb-0">Class</label>
+        <div class="mb-3">
+          <p-autoComplete
+            [(ngModel)]="selectedClass"
+            [dropdown]="true"
+            placeholder="Select Class"
+            [suggestions]="filteredClasses"
+            (completeMethod)="filterClass($event)"
+            optionLabel="name"
+          />
+        </div>
+        <label for="classes" class="form-label mb-0">Activity</label>
+        <div class="mb-3">
+          <p-autoComplete
+            [(ngModel)]="selectedActivity"
+            [dropdown]="true"
+            placeholder="Select Activity"
+            [suggestions]="filteredActivities"
+            (completeMethod)="filterActivity($event)"
+            optionLabel="name"
+          />
+        </div>
+        <p class="text-muted">*You can choose multiple filters</p>
+        <button
+          type="button"
+          class="btn btn-primary w-100"
+          (click)="onSelectedFilter()"
+        >
+          Apply Now
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

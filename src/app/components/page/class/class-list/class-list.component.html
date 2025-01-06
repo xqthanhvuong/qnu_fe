@@ -1,0 +1,327 @@
+<div class="rounded-4 w-100 h-100" style="position: relative">
+    <div *ngIf="!isMyClass" class="fs-4 fw-bold mb-2">
+      Class
+    </div>
+    <div *ngIf="isMyClass" class="fs-4 fw-bold mb-2">
+      My Class
+    </div>
+    <div class="mb-2 d-flex justify-content-between">
+      <div class="col-md-5">
+          <div class="input-group">
+              <input class="form-control border" #searchInput style="border-radius:  0.375rem;" type="search" placeholder="Search">
+              <span class="input-group-append">
+                  <button class="btn hvnone btn-outline-secondary bg-white border-start-0 border ms-n5" style="border-radius: 0 0.375rem 0.375rem 0; transform: translateX(-97%);" type="button">
+                    <i class="bi bi-search"></i>
+                  </button>
+              </span>
+          </div>
+      </div>
+      <div class="d-flex me-4" *ngIf="!isMyClass">
+        <button class="btn btn-outline-primary me-2 d-flex align-items-center justify-content-center" style="border-width: 1px;" data-bs-toggle="modal" data-bs-target="#filterModal">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" width="24px" height="24px" viewBox="-5.5 0 32 32" version="1.1" class="bi bi-funnel-fill me-2">
+            <title>filter</title>
+            <path d="M8.48 25.72c-0.16 0-0.32-0.040-0.44-0.12-0.24-0.16-0.4-0.44-0.4-0.72v-8.72l-7.48-8.48c-0.2-0.24-0.28-0.6-0.12-0.88s0.44-0.48 0.76-0.48h19.8c0.32 0 0.64 0.2 0.76 0.48 0.12 0.32 0.080 0.64-0.12 0.92l-7.8 8.8v6.32c0 0.32-0.2 0.6-0.48 0.76l-4.080 2c-0.080 0.080-0.24 0.12-0.4 0.12zM2.64 7.96l6.48 7.32c0.12 0.16 0.2 0.36 0.2 0.56v7.64l2.4-1.2v-6.080c0-0.2 0.080-0.4 0.2-0.56l6.8-7.68c0.040 0-16.080 0-16.080 0z"/>
+            </svg>
+          Filter
+      </button>
+      
+        <button *ngIf="(authService.checkPermissions('CREATE_CLASS'))" type="button" class="me-2 btn btn-primary" data-bs-toggle="modal" data-bs-target="#csvUploadModal">
+          Add by CSV
+        </button>
+        <button
+        *ngIf="(authService.checkPermissions('CREATE_CLASS'))"
+          type="button"
+          class="btn btn-primary"
+          (click)="navigateAddClass()"
+        >
+          Add Class
+        </button>
+      </div>
+  </div>
+    <div class="rounded-4 me-4" style="overflow: hidden; height: 400px;">
+      <div class="table-responsive mh-75" style="overflow-y: auto">
+        <table
+          class="table table-hover table-borderless align-middle"
+        >
+          <thead class="table-light">
+            <tr>
+              <th>ID</th>
+              <th>Class Name</th>
+              <th>Batch Name</th>
+              <th>Department Name</th>
+              <th>Duration Years</th>
+              <th>Created At</th>
+              <th>Updated At</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let class of classes">
+              <td>{{ class.id }}</td>
+              <td>{{ class.name }}</td>
+              <td>{{ class.courseName }}</td>
+              <td>{{ class.departmentName }}</td>
+              <td>{{ class.durationYears }}</td>
+              <td>{{ class.createdAt | date : "MM/dd/yyyy" }}</td>
+              <td>{{ class.updatedAt | date : "MM/dd/yyyy" }}</td>
+              <td>
+                <div class="d-flex">
+                  <div
+                    class="me-2 cursor-pointer"
+                    (click)="detailClass(class)"
+
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                    >
+                      <path
+                        d="M9.02992 13.9999C8.63992 13.4299 8.41992 12.7399 8.41992 11.9999C8.41992 10.0199 10.0199 8.41992 11.9999 8.41992C13.9799 8.41992 15.5799 10.0199 15.5799 11.9999C15.5799 13.9799 13.9799 15.5799 11.9999 15.5799"
+                        stroke="#292D32"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                      <path
+                        d="M17.5598 5.58047C15.8698 4.38047 13.9698 3.73047 11.9998 3.73047C8.46984 3.73047 5.17984 5.81047 2.88984 9.41047C1.98984 10.8205 1.98984 13.1905 2.88984 14.6005C5.17984 18.2005 8.46984 20.2805 11.9998 20.2805C15.5298 20.2805 18.8198 18.2005 21.1098 14.6005C22.0098 13.1905 22.0098 10.8205 21.1098 9.41047"
+                        stroke="#292D32"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </div>
+                  <div class="me-2 cursor-pointer"
+                  *ngIf="!isMyClass && (authService.checkPermissions('UPDATE_CLASS'))" 
+                  (click)="editClass(class)"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                    >
+                      <path
+                        d="M13.2599 3.60022L5.04985 12.2902C4.73985 12.6202 4.43985 13.2702 4.37985 13.7202L4.00985 16.9602C3.87985 18.1302 4.71985 18.9302 5.87985 18.7302L9.09985 18.1802C9.54985 18.1002 10.1799 17.7702 10.4899 17.4302L18.6999 8.74022C20.1199 7.24022 20.7599 5.53022 18.5499 3.44022C16.3499 1.37022 14.6799 2.10022 13.2599 3.60022Z"
+                        stroke="#292D32"
+                        stroke-width="1.5"
+                        stroke-miterlimit="10"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                      <path
+                        d="M11.8901 5.0498C12.3201 7.8098 14.5601 9.9198 17.3401 10.1998"
+                        stroke="#292D32"
+                        stroke-width="1.5"
+                        stroke-miterlimit="10"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                      <path
+                        d="M3 22H21"
+                        stroke="#292D32"
+                        stroke-width="1.5"
+                        stroke-miterlimit="10"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </div>
+                  <div
+                    class="cursor-pointer"
+                    data-bs-toggle="modal"
+                    *ngIf="!isMyClass && (authService.checkPermissions('DELETE_CLASS'))"
+                    (click)="openDeleteModal(class.id)"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                    >
+                      <path
+                        d="M21 5.98047C17.67 5.65047 14.32 5.48047 10.98 5.48047C9 5.48047 7.02 5.58047 5.04 5.78047L3 5.98047"
+                        stroke="#292D32"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                      <path
+                        d="M8.5 4.97L8.72 3.66C8.88 2.71 9 2 10.69 2H13.31C15 2 15.13 2.75 15.28 3.67L15.5 4.97"
+                        stroke="#292D32"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                      <path
+                        d="M18.8499 9.13965L18.1999 19.2096C18.0899 20.7796 17.9999 21.9996 15.2099 21.9996H8.7899C5.9999 21.9996 5.9099 20.7796 5.7999 19.2096L5.1499 9.13965"
+                        stroke="#292D32"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                      <path
+                        d="M10.3301 16.5H13.6601"
+                        stroke="#292D32"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                      <path
+                        d="M9.5 12.5H14.5"
+                        stroke="#292D32"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div
+      class="pagination-container d-flex w-100 justify-content-between"
+      style="position: absolute; bottom: 0; padding: 10px 10px 0 0 "
+    >
+    <div class="d-flex align-items-center">
+      Total record count: {{ totalRecords }}
+    </div>
+    <div></div>
+    <ng-template *ngIf="!isMyClass">
+    <p-paginator 
+    (onPageChange)="onPageChange($event)" 
+    [rows]="rows" 
+    [first]="first"
+    [totalRecords]="totalRecords" 
+    [rowsPerPageOptions]="[7, 10, 30, 50]"
+    />
+  </ng-template>
+    </div>
+  </div>
+
+  
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteModalLabel">Confirm deletion</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Are you sure you want to delete this item?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+          <button type="button" class="btn btn-danger" (click)="confirmDelete()">Yes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="modal fade" id="filterModal" #filterModal tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="filterModalLabel">Select Filter</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div *ngIf="isRoleAdmin()">
+            <label for="department" class="form-label">Department</label>
+            <div class="mb-3">
+              <p-autoComplete
+              [(ngModel)]="selectedDepartment"
+              [dropdown]="true"
+              [suggestions]="filteredDepartments"
+              placeholder="Select Department"
+              (completeMethod)="filterDepartment($event)"
+              optionLabel="name" />
+            </div>
+          </div>
+            <label for="course" class="form-label">Batch</label>
+            <div class="mb-3">
+              <p-autoComplete
+              [(ngModel)]="selectedCourse"
+              [dropdown]="true"
+              placeholder="Select Batch"
+              [suggestions]="filteredCourses"
+              (completeMethod)="filterCourse($event)"
+              optionLabel="name" />
+            </div>
+            <p class="text-muted">*You can choose multiple filters</p>
+            <button type="button" class="btn btn-primary w-100" (click)="onSelectedFilter()">Apply Now</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  
+<div
+class="modal fade"
+id="csvUploadModal"
+tabindex="-1"
+aria-labelledby="csvUploadModalLabel"
+aria-hidden="true"
+>
+<div class="modal-dialog modal-dialog-centered">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="csvUploadModalLabel">
+        Upload CSV for Departments
+      </h5>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+      ></button>
+    </div>
+    <div class="modal-body text-center">
+      <!-- Nút tải file mẫu CSV -->
+      <button
+        class="btn btn-outline-secondary mb-3"
+        (click)="downloadCSVTemplate()"
+      >
+        Download Sample XLSX
+      </button>
+
+      <!-- Vùng kéo thả file hoặc chọn file -->
+      <div class="file-upload-area border rounded p-3">
+        <input
+          type="file"
+          (change)="onFileSelected($event)"
+          accept=".xlsx"
+          class="form-control-file"
+        />
+        <p class="mt-3">
+          Drag and drop files here to upload or click to select a file.
+        </p>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+        Close
+      </button>
+      <button
+        type="button"
+        class="btn btn-primary"
+        (click)="uploadCSVFile()"
+        [disabled]="!selectedFile"
+      >
+        Upload
+      </button>
+    </div>
+  </div>
+</div>
+</div>

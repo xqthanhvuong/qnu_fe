@@ -1,0 +1,271 @@
+<div class="rounded-4 w-100 h-100" style="position: relative">
+  <div class="d-flex justify-content-between me-4">
+    <div class="fs-4 fw-bold mb-2">Attendance</div>
+  </div>
+
+  <div class="rounded-4 me-4" style="overflow: hidden; height: 90%">
+    <div class="table-responsive h-100" style="overflow-y: auto">
+      <div class="card">
+        <p-table
+          #dt2
+          [value]="attendanceRecords"
+          dataKey="id"
+          sortField="studentCode"
+          [sortOrder]="-1"
+          [rows]="5"
+          [rowsPerPageOptions]="[5, 10, 50]"
+          [paginator]="true"
+          [globalFilterFields]="['studentCode', 'studentName']"
+          [tableStyle]="{ 'max-width': '100%' }"
+        >
+          <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-between">
+              <p-iconField iconPosition="left" class="ml-auto">
+                <p-inputIcon>
+                  <i class="pi pi-search"></i>
+                </p-inputIcon>
+                <input
+                  pInputText
+                  type="text"
+                  (input)="onSearch($event)"
+                  placeholder="Search keyword"
+                />
+              </p-iconField>
+              <div>
+                <button
+                *ngIf="isRoleDepartement() || authService.checkPermissions('CREATE_ATTENDANCE')"
+                  type="button"
+                  (click)="createAttendanceSession()"
+                  class="btn btn-outline-primary"
+                >
+                  Start attendance
+                </button>
+                <button
+                  type="button"
+                  (click)="openAttendanceModal()"
+                  class="btn ms-2 btn-primary"
+                >
+                  Attendance
+                </button>
+              </div>
+            </div>
+          </ng-template>
+
+          <ng-template pTemplate="header">
+            <tr>
+              <th style="width: 20%">
+                <p-columnFilter
+                  type="text"
+                  field="studentCode"
+                  placeholder="Search by code"
+                  ariaLabel="Filter Student Code"
+                />
+              </th>
+              <th style="width: 30%">
+                <p-columnFilter
+                  type="text"
+                  field="studentName"
+                  placeholder="Search by name"
+                  ariaLabel="Filter name"
+                />
+              </th>
+              <th style="width: 0%"></th>
+              <th>
+                <p-columnFilter
+                  field="status"
+                  matchMode="equals"
+                  [showMenu]="false"
+                >
+                  <ng-template
+                    pTemplate="filter"
+                    let-value
+                    let-filter="filterCallback"
+                  >
+                    <p-dropdown
+                      [ngModel]="value"
+                      [options]="statuses"
+                      [appendTo]="'body'"
+                      (onChange)="filter($event.value)"
+                      placeholder="Select One"
+                      [showClear]="true"
+                    >
+                      <ng-template let-option pTemplate="item">
+                        <p-tag
+                          [value]="option.value"
+                          [severity]="getSeverity(option.label)"
+                        />
+                      </ng-template>
+                    </p-dropdown>
+                  </ng-template>
+                </p-columnFilter>
+              </th>
+              <th></th>
+            </tr>
+            <tr>
+              <th pSortableColumn="studentCode" style="width: 20%">
+                Student Code <p-sortIcon field="studentCode" />
+              </th>
+              <th pSortableColumn="studentName" style="width: 40%">
+                Student Name <p-sortIcon field="studentName" />
+              </th>
+              <th pSortableColumn="checkInTime" style="width: 20%">
+                Check In Time <p-sortIcon field="checkInTime" />
+              </th>
+              <th pSortableColumn="status" style="width: 10%">
+                Status <p-sortIcon field="status" />
+              </th>
+              <th style="width: 10%">Action</th>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="body" let-attendanceRecord>
+            <tr>
+              <td>{{ attendanceRecord.studentCode }}</td>
+              <td>{{ attendanceRecord.studentName }}</td>
+              <td>{{ attendanceRecord.checkInTime | date : "short" }}</td>
+              <td>
+                <p-tag
+                  [value]="attendanceRecord.status"
+                  [severity]="getSeverity(attendanceRecord.status)"
+                />
+              </td>
+              <td>
+                <div
+                  class="cursor-pointer"
+                  (click)="openAttendanceStatusModal(attendanceRecord.id)"
+                >
+                  <i
+                    class="bi bi-person-check-fill"
+                    style="font-size: 24px"
+                  ></i>
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="4">No attendance record found.</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="attendanceCodeModal" tabindex="-1" aria-labelledby="attendanceCodeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-sm">
+    <div class="modal-content shadow-lg rounded-4">
+      <!-- Modal Header -->
+      <div class="modal-header bg-dark text-white rounded-top">
+        <h5 class="modal-title fw-bold" id="attendanceCodeModalLabel">Attendance Code</h5>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body text-center py-4">
+        <p class="fs-4 fw-semibold text-dark mb-0">{{ attendanceCode }}</p>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn btn-dark px-4 py-2" data-bs-dismiss="modal">
+          OK
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="attendanceModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Attendance code</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <p class="text-color-secondary block mb-5">
+          Please enter the code sent by your class leader.
+        </p>
+        <div class="d-flex justify-content-center">
+          <p-inputOtp [(ngModel)]="valueCode" [length]="6" style="gap: 0">
+            <ng-template
+              pTemplate="input"
+              let-token
+              let-events="events"
+              let-index="index"
+            >
+              <input
+                pInputText
+                type="text"
+                [maxLength]="1"
+                (input)="events.input($event)"
+                (keydown)="events.keydown($event)"
+                (paste)="events.paste($event)"
+                [attr.value]="token"
+                class="custom-otp-input"
+              />
+              <div *ngIf="index === 3" class="px-3">
+                <i class="pi pi-minus"></i>
+              </div>
+            </ng-template>
+          </p-inputOtp>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <p-button (onClick)="submitCode()" label="Submit Code" />
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="attendanceUpdate" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Attendance status</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <p class="text-color-secondary block mb-5">You can modify status of your class student</p>
+        <label for="" class="fw-bold mb-2" style="font-size: 18px;">Status</label>
+        <p-dropdown
+        [style]="{width: '100%' }"
+          [(ngModel)]="statusUpdate"
+          [options]="statuses"
+          placeholder="Select Status"
+          [showClear]="true"
+        >
+          <ng-template let-option pTemplate="item">
+            <p-tag
+              [value]="option.value"
+              [severity]="getSeverity(option.label)"
+            />
+          </ng-template>
+        </p-dropdown>
+      </div>
+      <div class="modal-footer">
+        <p-button label="Submit" (onClick)="submitStatus()" />
+      </div>
+    </div>
+  </div>
+</div>
+
+

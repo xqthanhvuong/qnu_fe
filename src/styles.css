@@ -1,1 +1,264 @@
-/* You can add global styles to this file, and also import other style files */
+@layer mycss, primeng;
+
+@layer mycss{
+.letter-spacing-1 {
+    letter-spacing: 1px;
+  }
+  
+  .letter-spacing-2 {
+    letter-spacing: 2px;
+  }
+  
+  .letter-spacing-3 {
+    letter-spacing: 3px;
+  }
+  
+  .letter-spacing-4 {
+    letter-spacing: 4px;
+  }
+
+  .p-float-label input:focus ~ label, .p-float-label input.p-filled ~ label, .p-float-label textarea:focus ~ label, .p-float-label textarea.p-filled ~ label, .p-float-label .p-inputwrapper-focus ~ label, .p-float-label .p-inputwrapper-filled ~ label {
+    top: -0.2rem;
+    font-size: 17px;
+    background-color: white;
+    padding: 0 5px 0 5px;
+}
+  
+.p-password-input {
+    width: 100%; /* Đặt chiều rộng đầy đủ */
+  }
+.p-password {
+    width: 90%;
+}
+.w-80 {
+  width: 80% !important;
+}
+.w-90 {
+  width: 90% !important;
+}
+.w-20 {
+  width: 20%;
+}
+.w-35{
+  width: 35%;
+}
+
+.h-80{
+  height: 80%;
+}
+.h-10{
+  height: 10%;
+}
+.h-90{
+  height: 90%;
+}
+.h-70{
+  height: 70%;
+}
+
+.h-30{
+  height: 30%;
+}
+
+.w-15{
+  width: 15%;
+}
+
+.p-inputtext{
+  padding: 0.5rem 0.5rem;
+}
+
+.p-icon-field-left > .p-inputtext{
+  padding-left: 2.5rem;
+}
+.cursor-pointer {
+  cursor: pointer;
+}
+.mh-75{
+  max-height: 400px;
+}
+#pn_id_2_list, .p-autocomplete-items, .p-dropdown-items{
+  padding-left: 0 !important;
+}
+body {
+  background-color: #F5F5F5 !important;
+}
+
+.p-paginator, .p-dropdown{
+  background-color: transparent !important;
+}
+
+.p-autocomplete-items, .p-dropdown-items{
+  margin-bottom: 0 !important;
+}
+
+.p-inputwrapper .p-autocomplete{
+  width: 100% !important;
+}
+
+.p-element > .p-button-icon-only{
+  border-radius: 50% !important;
+}
+
+.scrollable::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
+}
+.p-dropdown.p-dropdown-clearable .p-dropdown-label{
+  padding-right: 1.75rem;
+}
+
+.p-datatable .p-datatable-tbody > tr > td {
+  text-align: left;
+  border: 1px solid #e5e7eb;
+  border-width: 0 0 1px 0;
+  padding: 0.5rem 1rem;
+}
+
+.custom-otp-input {
+  width: 48px;
+  height: 48px;
+  font-size: 24px;
+  appearance: none;
+  text-align: center;
+  transition: all 0.2s;
+  border-radius: 0;
+  border: 1px solid var(--surface-400);
+  background: transparent;
+  outline-offset: -2px;
+  outline-color: transparent;
+  border-right: 0 none;
+  transition: outline-color 0.3s;
+  color: var(--text-color);
+}
+
+.custom-otp-input:focus {
+  outline: 2px solid var(--primary-color);
+}
+
+.custom-otp-input:first-child,
+.custom-otp-input:nth-child(5) {
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
+}
+
+.custom-otp-input:nth-child(3),
+.custom-otp-input:last-child {
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
+  border-right-width: 1px;
+  border-right-style: solid;
+  border-color: var(--surface-400);
+}
+/* Thông báo chưa đọc */
+.notification-popup ul li.unread {
+  position: relative; /* Để định vị dấu chấm đỏ */
+}
+
+.unread-indicator {
+  position: absolute;
+  top: 10%;
+  right: 3px;
+  transform: translateY(-50%);
+  width: 10px;
+  height: 10px;
+  background-color: red;
+  border-radius: 50%;
+}
+
+
+.notification-icon {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.notification-popup {
+  position: absolute;
+  top: 40px;
+  right: 0;
+  width: 300px;
+  background-color: white;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  overflow: hidden;
+  display: none;
+  z-index: 100;
+}
+
+.notification-popup.active {
+  display: block;
+}
+
+.notification-popup h4 {
+  margin: 0;
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  font-size: 16px;
+}
+
+.notification-popup ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 300px; /* Giới hạn chiều cao */
+  overflow-y: auto; /* Bật cuộn dọc */
+  overflow-x: hidden; /* Ẩn cuộn ngang */
+}
+
+.notification-popup ul::-webkit-scrollbar {
+  width: 8px;
+}
+
+.notification-popup ul::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.notification-popup ul li {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  word-wrap: break-word;
+}
+
+.notification-popup ul li:last-child {
+  border-bottom: none;
+}
+
+.notification-popup ul li:hover {
+  background-color: #f5f5f5;
+}
+
+.notification-content {
+  flex: 1;
+  font-size: 14px;
+}
+
+.notification-time {
+  margin-left: 10px;
+  font-size: 12px;
+  color: gray;
+  white-space: nowrap; /* Ngăn thời gian xuống dòng */
+}
+
+
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1050;
+}
+
+
+}
+
+

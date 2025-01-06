@@ -1,0 +1,220 @@
+<div class="h-100 d-flex w-100">
+  <div class="w-20 h-100">
+    <div
+      class="d-flex h-100 flex-column flex-shrink-0 p-3 bg-body border border-1"
+      style="width: 240px"
+    >
+      <ul
+        class="nav h-90 nav-pills flex-column flex-nowrap scrollable mb-auto"
+        style="overflow-y: scroll"
+      >
+        <li class="nav-item" 
+        *ngIf="isAdminRole() && authService.checkPermissions('VIEW_DEPARTMENT')"
+        >
+          <a
+            (click)="navigate('/department')"
+            class="nav-link"
+            [routerLink]="'/department'"
+            [ngClass]="{
+              active: isActive('/department'),
+              'link-dark': !isActive('/department')
+            }"
+            aria-current="page"
+          >
+            <i class="me-2 bi bi-grid-1x2-fill"></i>
+            Department
+          </a>
+        </li>
+        <li class="nav-item"
+        *ngIf="isAdminRole() && authService.checkPermissions('VIEW_COURSE')"
+        >
+          <a
+            (click)="navigate('/batch')"
+            class="nav-link"
+            [routerLink]="'/batch'"
+            [ngClass]="{
+              active: isActive('/batch'),
+              'link-dark': !isActive('/batch')
+            }"
+          >
+            <i class="me-2 bi bi-calendar-check-fill"></i>
+            Batch
+          </a>
+        </li>
+        <li class="nav-item"
+        *ngIf="!isRoleStudent() && authService.checkPermissions('VIEW_LECTURER')"
+        >
+          <a
+            (click)="navigate('/lecturer')"
+            class="nav-link"
+            [routerLink]="'/lecturer'"
+            [ngClass]="{
+              active: isActive('/lecturer'),
+              'link-dark': !isActive('/lecturer')
+            }"
+          >
+            <i class="me-2 bi bi-person-video3"></i>
+            Lecturers
+          </a>
+        </li>
+        <li class="nav-item"
+        *ngIf="!isRoleStudent() && authService.checkPermissions('VIEW_STAFF')"
+        >
+          <a
+            (click)="navigate('/staff')"
+            class="nav-link"
+            [routerLink]="'/staff'"
+            [ngClass]="{
+              active: isActive('/staff'),
+              'link-dark': !isActive('/staff')
+            }"
+          >
+            <i class="me-2 bi bi-person-workspace"></i>
+            Staffs
+          </a>
+        </li>
+        <li class="nav-item"
+        *ngIf="!isRoleStudent() && authService.checkPermissions('VIEW_CLASS')"
+        >
+          <a
+            (click)="navigate('/class')"
+            class="nav-link"
+            [routerLink]="'/class'"
+            [ngClass]="{
+              active: isActive('/class'),
+              'link-dark': !isActive('/class')
+            }"
+          >
+            <i class="me-2 pi pi-users"></i>
+            Classes
+          </a>
+        </li>
+        <li class="nav-item"
+        *ngIf="!isRoleStudent() && authService.checkPermissions('VIEW_STUDENT')"
+        >
+          <a
+            (click)="navigate('/students')"
+            class="nav-link"
+            [routerLink]="'/student'"
+            [ngClass]="{
+              active: isActive('/students'),
+              'link-dark': !isActive('/students')
+            }"
+          >
+            <i class="me-2 bi bi-mortarboard-fill"></i>
+            Students
+          </a>
+        </li>
+        <li class="nav-item"
+        *ngIf="isRoleStudent() || authService.checkPermissions('VIEW_ADVISOR')"
+        >
+          <a
+            (click)="navigate('/advisors')"
+            class="nav-link"
+            [routerLink]="'/advisors'"
+            [ngClass]="{
+              active: isActive('/advisors'),
+              'link-dark': !isActive('/advisors')
+            }"
+          >
+            <i class="me-2 bi bi-person-lines-fill"></i>
+            Academic Advisors
+          </a>
+        </li>
+        <li class="nav-item" *ngIf="authService.checkPermissions('VIEW_ROLE')">
+          <a
+            (click)="navigate('/role')"
+            class="nav-link"
+            [routerLink]="'/role'"
+            [ngClass]="{
+              active: isActive('/role'),
+              'link-dark': !isActive('/role')
+            }"
+          >
+            <i class="me-2 bi bi-person-bounding-box"></i>
+            Role
+          </a>
+        </li>
+        <li class="nav-item" *ngIf="!isAdminRole() && !isRoleStudent()">
+          <a
+            (click)="navigate('/my-class')"
+            class="nav-link"
+            [routerLink]="'/my-class'"
+            [ngClass]="{
+              active: isActive('/my-class'),
+              'link-dark': !isActive('/my-class')
+            }"
+          >
+            <i class="bi bi-easel3-fill me-2"></i>
+            My class
+          </a>
+        </li>
+        <li class="nav-item" *ngIf="isRoleStudent()">
+          <a
+            (click)="navigate('/my-class/student')"
+            class="nav-link"
+            [routerLink]="'/my-class/student'"
+            [ngClass]="{
+              active: isActive('/my-class'),
+              'link-dark': !isActive('/my-class')
+            }"
+          >
+            <i class="bi bi-easel3-fill me-2"></i>
+            My class
+          </a>
+        </li>
+        <li class="nav-item"
+        *ngIf="!isRoleStudent() && authService.checkPermissions('VIEW_ACTIVITY')"
+        >
+          <a
+            (click)="navigate('/activity')"
+            class="nav-link"
+            [routerLink]="'/activity'"
+            [ngClass]="{
+              active: isActive('/activity'),
+              'link-dark': !isActive('/activity')
+            }"
+          >
+            <i class="bi bi-card-checklist me-2"></i>
+
+            Activity
+          </a>
+        </li>
+      </ul>
+      <hr />
+      <div class="dropdown">
+        <a
+          href="#"
+          class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle"
+          id="dropdownUser2"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          <img
+            src="https://github.com/mdo.png"
+            alt=""
+            width="32"
+            height="32"
+            class="rounded-circle me-2"
+          />
+          <strong>{{ username }}</strong>
+        </a>
+        <ul
+          class="dropdown-menu h-10 text-small shadow"
+          aria-labelledby="dropdownUser2"
+        >
+          <li><a class="dropdown-item" href="#">New project...</a></li>
+          <li><a class="dropdown-item" href="#">Settings</a></li>
+          <li><a class="dropdown-item" href="#">Profile</a></li>
+          <li>
+            <hr class="dropdown-divider" />
+          </li>
+          <li><a class="dropdown-item" href="#">Sign out</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="w-80 h-100">
+    <router-outlet></router-outlet>
+  </div>
+</div>

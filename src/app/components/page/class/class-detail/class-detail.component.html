@@ -1,0 +1,247 @@
+<div class="rounded-4 w-100 h-100" style="position: relative">
+    <div class="d-flex align-items-center mb-2">
+      <div class="fs-4 fw-bold">
+        Class
+      </div>
+      <div class="mx-2">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+        >
+          <path
+            d="M4.21948 3.09961C2.46948 3.09961 1.40953 5.01961 2.32953 6.50961L5.09949 10.9396C5.46949 11.5296 5.46949 12.4896 5.09949 13.0796L2.32953 17.5096C1.39953 18.9896 2.46948 20.9196 4.21948 20.9196H14.6695C15.2795 20.9196 16.0795 20.5196 16.4495 20.0296L21.6295 13.1296C22.0895 12.5196 22.1295 11.4896 21.7295 10.8496L17.5495 4.16961C17.1895 3.58961 16.3395 3.11961 15.6595 3.11961H8.65949"
+            stroke="#292D32"
+            stroke-width="1.5"
+            stroke-miterlimit="10"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </div>
+      <div class="fs-4 fw-bold">
+        Class Detail
+      </div>
+      <div class="mx-2">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+        >
+          <path
+            d="M4.21948 3.09961C2.46948 3.09961 1.40953 5.01961 2.32953 6.50961L5.09949 10.9396C5.46949 11.5296 5.46949 12.4896 5.09949 13.0796L2.32953 17.5096C1.39953 18.9896 2.46948 20.9196 4.21948 20.9196H14.6695C15.2795 20.9196 16.0795 20.5196 16.4495 20.0296L21.6295 13.1296C22.0895 12.5196 22.1295 11.4896 21.7295 10.8496L17.5495 4.16961C17.1895 3.58961 16.3395 3.11961 15.6595 3.11961H8.65949"
+            stroke="#292D32"
+            stroke-width="1.5"
+            stroke-miterlimit="10"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </div>
+      <div class="fs-4 fw-bold">
+        {{classDetail?.name}}
+      </div>
+    </div>
+    <div class="mb-2 me-4 d-flex justify-content-between">
+      <div class="col-md-5">
+          <div class="input-group">
+              <input class="form-control border" #searchInput style="border-radius:  0.375rem;" type="search" placeholder="Search">
+              <span class="input-group-append">
+                  <button class="btn hvnone btn-outline-secondary bg-white border-start-0 border ms-n5" style="border-radius: 0 0.375rem 0.375rem 0; transform: translateX(-97%);" type="button">
+                    <i class="bi bi-search"></i>
+                  </button>
+              </span>
+          </div>
+      </div>
+  
+      <div class="d-flex">
+        <button
+        *ngIf="isActive('/my-class')"
+          type="button"
+          (click)="navigateClassAcvivity()"
+          class="btn me-2 btn-outline-primary"
+        >
+        View Activity
+        </button>
+        
+        <button type="button" *ngIf="!isActive('/my-class')" class="me-2 btn btn-primary" data-bs-toggle="modal" data-bs-target="#csvUploadModal">
+          Add by CSV
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary me-4"
+          *ngIf="!isActive('/my-class')"
+          (click)="navigateAddStudent()"
+        >
+          Add Student
+        </button>
+      </div>
+  </div>
+    <div class="rounded-4 me-4" style="overflow: hidden; height: 400px;">
+      <div class="table-responsive mh-75" style="overflow-y: auto">
+        <table
+          class="table table-hover table-borderless align-middle"
+        >
+          <thead class="table-light">
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Gender</th>
+              <th>Email</th>
+              <th>Birth day</th>
+              <th>Position</th>
+              <th>Student Code</th>
+              <th *ngIf="!isRoleStudent()">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let studentOfClass of classDetail?.studentOfClass">
+              <td>{{ studentOfClass.id }}</td>
+              <td>{{ studentOfClass.name }}</td>
+              <td>{{ studentOfClass.gender }}</td>
+              <td>{{ studentOfClass.email }}</td>
+              <td>{{ studentOfClass.birthDate }}</td>
+              <td>{{ studentOfClass.studentPosition}}</td>
+              <td>{{ studentOfClass.studentCode }}</td>
+              <td *ngIf="!isRoleStudent()">
+                <div class="d-flex">
+                  <div
+                    class="me-2 cursor-pointer" 
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                    >
+                      <path
+                        d="M9.02992 13.9999C8.63992 13.4299 8.41992 12.7399 8.41992 11.9999C8.41992 10.0199 10.0199 8.41992 11.9999 8.41992C13.9799 8.41992 15.5799 10.0199 15.5799 11.9999C15.5799 13.9799 13.9799 15.5799 11.9999 15.5799"
+                        stroke="#292D32"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                      <path
+                        d="M17.5598 5.58047C15.8698 4.38047 13.9698 3.73047 11.9998 3.73047C8.46984 3.73047 5.17984 5.81047 2.88984 9.41047C1.98984 10.8205 1.98984 13.1905 2.88984 14.6005C5.17984 18.2005 8.46984 20.2805 11.9998 20.2805C15.5298 20.2805 18.8198 18.2005 21.1098 14.6005C22.0098 13.1905 22.0098 10.8205 21.1098 9.41047"
+                        stroke="#292D32"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </div>
+                  <div class="me-2 cursor-pointer"
+                  (click)="editStudent(studentOfClass.id)" 
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                    >
+                      <path
+                        d="M13.2599 3.60022L5.04985 12.2902C4.73985 12.6202 4.43985 13.2702 4.37985 13.7202L4.00985 16.9602C3.87985 18.1302 4.71985 18.9302 5.87985 18.7302L9.09985 18.1802C9.54985 18.1002 10.1799 17.7702 10.4899 17.4302L18.6999 8.74022C20.1199 7.24022 20.7599 5.53022 18.5499 3.44022C16.3499 1.37022 14.6799 2.10022 13.2599 3.60022Z"
+                        stroke="#292D32"
+                        stroke-width="1.5"
+                        stroke-miterlimit="10"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                      <path
+                        d="M11.8901 5.0498C12.3201 7.8098 14.5601 9.9198 17.3401 10.1998"
+                        stroke="#292D32"
+                        stroke-width="1.5"
+                        stroke-miterlimit="10"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                      <path
+                        d="M3 22H21"
+                        stroke="#292D32"
+                        stroke-width="1.5"
+                        stroke-miterlimit="10"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </div>
+                  <div
+                    class="cursor-pointer"
+                    data-bs-toggle="modal"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                    >
+                      <path
+                        d="M21 5.98047C17.67 5.65047 14.32 5.48047 10.98 5.48047C9 5.48047 7.02 5.58047 5.04 5.78047L3 5.98047"
+                        stroke="#292D32"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                      <path
+                        d="M8.5 4.97L8.72 3.66C8.88 2.71 9 2 10.69 2H13.31C15 2 15.13 2.75 15.28 3.67L15.5 4.97"
+                        stroke="#292D32"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                      <path
+                        d="M18.8499 9.13965L18.1999 19.2096C18.0899 20.7796 17.9999 21.9996 15.2099 21.9996H8.7899C5.9999 21.9996 5.9099 20.7796 5.7999 19.2096L5.1499 9.13965"
+                        stroke="#292D32"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                      <path
+                        d="M10.3301 16.5H13.6601"
+                        stroke="#292D32"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                      <path
+                        d="M9.5 12.5H14.5"
+                        stroke="#292D32"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div
+      class="pagination-container d-flex w-100 justify-content-between"
+      style="position: absolute; bottom: 0; padding: 10px 10px 0 0 "
+    >
+    <div class="d-flex align-items-center">
+      Total record count: {{ totalRecords }}
+    </div>
+    <p-paginator 
+    (onPageChange)="onPageChange($event)" 
+    [rows]="rows" 
+    [first]="first"
+    [totalRecords]="totalRecords" 
+    [rowsPerPageOptions]="[7,10]"
+    />
+    </div>
+  </div>
+
+  
+  

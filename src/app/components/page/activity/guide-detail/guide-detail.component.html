@@ -1,0 +1,154 @@
+<!-- <div class="rounded-4 w-100 h-100" style="position: relative">
+    <div class="fs-4 fw-bold mb-2">
+      Activity Guide
+    </div>
+    <div class="mb-2 d-flex justify-content-between">
+      <div class="col-md-5">
+          <div class="input-group">
+              <input class="form-control border" #searchInput style="border-radius:  0.375rem;" type="search" placeholder="Search">
+              <span class="input-group-append">
+                  <button class="btn hvnone btn-outline-secondary bg-white border-start-0 border ms-n5" style="border-radius: 0 0.375rem 0.375rem 0; transform: translateX(-97%);" type="button">
+                    <i class="bi bi-search"></i>
+                  </button>
+              </span>
+          </div>
+      </div>
+  
+      <div>
+        <button type="button" class="me-2 btn btn-primary" data-bs-toggle="modal" data-bs-target="#csvUploadModal">
+          Add by CSV
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary me-4"
+        >
+          Add
+        </button>
+      </div>
+  </div>
+    <div class="rounded-4 me-4" style="overflow: hidden; height: 335px;">
+      <div class="table-responsive mh-75" style="overflow-y: auto">
+        <p-table
+        [value]="activityGuides"
+        [paginator]="true"
+        [rows]="5"
+        [tableStyle]="{ 'min-width': '50rem' }"
+        [rowsPerPageOptions]="[5, 10, 20]"
+    >
+        <ng-template pTemplate="header">
+          <tr>
+              <th style="width:65%">Name</th>
+              <th style="width:10%">Link</th>
+              <th style="width:10%">created At</th>
+              <th style="width:15%">Action</th>
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-activityGuide>
+        <tr>
+          <td>{{ activityGuide.name }}</td>
+          <td><a href="{{activityGuide.pdfUrl}}">Click here</a></td>
+          <td>{{ activityGuide.createdAt | date : "MM/dd/yyyy" }}</td>
+          <td>
+            <div class="d-flex">
+              <div
+                class="me-2 cursor-pointer"
+
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                >
+                  <path
+                    d="M9.02992 13.9999C8.63992 13.4299 8.41992 12.7399 8.41992 11.9999C8.41992 10.0199 10.0199 8.41992 11.9999 8.41992C13.9799 8.41992 15.5799 10.0199 15.5799 11.9999C15.5799 13.9799 13.9799 15.5799 11.9999 15.5799"
+                    stroke="#292D32"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M17.5598 5.58047C15.8698 4.38047 13.9698 3.73047 11.9998 3.73047C8.46984 3.73047 5.17984 5.81047 2.88984 9.41047C1.98984 10.8205 1.98984 13.1905 2.88984 14.6005C5.17984 18.2005 8.46984 20.2805 11.9998 20.2805C15.5298 20.2805 18.8198 18.2005 21.1098 14.6005C22.0098 13.1905 22.0098 10.8205 21.1098 9.41047"
+                    stroke="#292D32"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </div>
+              
+              <div
+                class="cursor-pointer"
+                data-bs-toggle="modal"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                >
+                  <path
+                    d="M21 5.98047C17.67 5.65047 14.32 5.48047 10.98 5.48047C9 5.48047 7.02 5.58047 5.04 5.78047L3 5.98047"
+                    stroke="#292D32"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M8.5 4.97L8.72 3.66C8.88 2.71 9 2 10.69 2H13.31C15 2 15.13 2.75 15.28 3.67L15.5 4.97"
+                    stroke="#292D32"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M18.8499 9.13965L18.1999 19.2096C18.0899 20.7796 17.9999 21.9996 15.2099 21.9996H8.7899C5.9999 21.9996 5.9099 20.7796 5.7999 19.2096L5.1499 9.13965"
+                    stroke="#292D32"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M10.3301 16.5H13.6601"
+                    stroke="#292D32"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M9.5 12.5H14.5"
+                    stroke="#292D32"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </div>
+            </div>
+          </td>
+        </tr>
+    </ng-template>
+  </p-table>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteModalLabel">Confirm deletion</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Are you sure you want to delete this item?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+          <button type="button" class="btn btn-danger" (click)="confirmDelete()">Yes</button>
+        </div>
+      </div>
+    </div>
+  </div> -->

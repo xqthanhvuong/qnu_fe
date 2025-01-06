@@ -1,0 +1,96 @@
+<div class="rounded-4 w-100 h-100" style="position: relative">
+    <div class="d-flex align-items-center mb-2">
+      <div class="fs-4 fw-bold">Course</div>
+      <div class="mx-2">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+        >
+          <path
+            d="M4.21948 3.09961C2.46948 3.09961 1.40953 5.01961 2.32953 6.50961L5.09949 10.9396C5.46949 11.5296 5.46949 12.4896 5.09949 13.0796L2.32953 17.5096C1.39953 18.9896 2.46948 20.9196 4.21948 20.9196H14.6695C15.2795 20.9196 16.0795 20.5196 16.4495 20.0296L21.6295 13.1296C22.0895 12.5196 22.1295 11.4896 21.7295 10.8496L17.5495 4.16961C17.1895 3.58961 16.3395 3.11961 15.6595 3.11961H8.65949"
+            stroke="#292D32"
+            stroke-width="1.5"
+            stroke-miterlimit="10"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </div>
+      <div *ngIf="!isEditMode; else editCourseMode" class="fs-4 fw-bold">
+        Add New Course
+      </div>
+      <ng-template #editCourseMode>
+        <div class="fs-4 fw-bold">Edit Course</div>
+      </ng-template>
+    </div>
+    <div>
+      <div class="me-4 mt-5">
+        <div class="card p-4 text-start rounded-4">
+          <div class="row px-3">
+            <div class="col-5">
+              <div class="mb-3">
+                <label for="courseName" class="form-label">Course Name</label>
+                <input
+                  pInputText
+                  [(ngModel)]="name"
+                  type="text"
+                  class="w-90"
+                  id="courseName"
+                  placeholder="Enter course name"
+                  tabindex="1"
+                />
+              </div>
+            </div>
+            <div class="col-5">
+              <div class="mb-3">
+                <label for="startYear" class="form-label">Start Year</label>
+                <input
+                  pInputText
+                  [(ngModel)]="startYear"
+                  type="number"
+                  class="w-90"
+                  id="startYear"
+                  placeholder="Enter start year"
+                  tabindex="2"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="endYear" class="form-label">End Year</label>
+                <input
+                  pInputText
+                  [(ngModel)]="endYear"
+                  type="number"
+                  class="w-90"
+                  id="endYear"
+                  placeholder="Enter end year"
+                  tabindex="3"
+                />
+              </div>
+            </div>
+          </div>
+          <div *ngIf="!isEditMode" class="text-center mt-4">
+            <button
+              type="button"
+              class="btn btn-primary px-5"
+              (click)="addCourse()"
+            >
+              Add Now
+            </button>
+          </div>
+          <div *ngIf="isEditMode" class="text-center mt-4">
+            <button
+              type="button"
+              class="btn btn-primary px-5"
+              (click)="updateCourse()"
+            >
+              Update Now
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
