@@ -6,3 +6,24 @@
 }
 
 
+.file-upload-area {
+  position: relative;
+  text-align: center;
+  cursor: pointer;
+}
+
+.file-upload-area.drag-over {
+  background-color: #f1f1f1;
+  border-color: #007bff;
+}
+
+.file-upload-area p {
+  margin-top: 1rem;
+  font-size: 1rem;
+  color: #888;
+}
+
+.file-upload-area div {
+  font-size: 1.1rem;
+  color: #333;
+}

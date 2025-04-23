@@ -5,12 +5,13 @@ import { JsonResponse } from '../dto/response/json-response';
 import { PagedResponse } from '../dto/response/paged-response';
 import { ActivityResponse } from '../dto/response/activity-response';
 import { ActivitySummary } from '../dto/response/activity-summary';
+import { enviroment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ActivityService {
-  private baseUrl = 'http://localhost:8000/AMQNU/api/activity';
+  private baseUrl = enviroment.apiURL + 'activity';
 
   constructor(private http: HttpClient) {}
 

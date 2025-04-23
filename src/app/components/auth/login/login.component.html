@@ -107,9 +107,9 @@
     class="row d-flex h-100 justify-content-between px-5 align-items-center rounded-5 border border-1 pe-0"
   >
     <div class="col-12 col-md-6">
-      <div class="text-start fw-bold fs-1 letter-spacing-1">Login</div>
+      <div class="text-start fw-bold fs-1 letter-spacing-1">{{ 'LOGIN' | translate}}</div>
       <div class="text-start text-muted mt-1 mb-4">
-        Login to access your account
+        {{ 'LOGIN_ACCESS' | translate }}
       </div>
       <p-floatLabel>
         <input
@@ -140,18 +140,18 @@
             id="rememberme"
           />
           <label class="form-check-label" for="rememberme">
-            Remember me
+            {{ 'REMEMBER_ME' | translate }}
           </label>
         </div>
         <p>
           <a
             class="link-offset-2 link-underline link-underline-opacity-0 link-danger"
             href="#"
-            >Forgot Password</a
+            >{{'FORGOT_PASSWORD' | translate}}</a
           >
         </p>
       </div>
-      <button type="button" (click)="onSubmit()" class="btn btn-primary w-90 mt-3">Login</button>
+      <button type="button" (click)="onSubmit()" class="btn btn-primary w-90 mt-3">{{'LOGIN' | translate}}</button>
     </div>
     
     <div

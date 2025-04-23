@@ -5,18 +5,15 @@ import { DepartmentService } from '../../../../service/department.service';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StaffRequest } from '../../../../dto/request/staff-request';
+import { BaseFilterComponent } from '../../../../core/BaseFilterComponent';
 
-interface AutoCompleteCompleteEvent {
-  originalEvent: Event;
-  query: string;
-}
 
 @Component({
   selector: 'app-staff-add',
   templateUrl: './staff-add.component.html',
   styleUrl: './staff-add.component.css'
 })
-export class StaffAddComponent {
+export class StaffAddComponent extends BaseFilterComponent {
   isEditMode = false;
   staffId: number | null = null;
   name: string = '';
@@ -39,7 +36,9 @@ export class StaffAddComponent {
     private toastr: ToastrService,
     private route: ActivatedRoute,
     private router: Router
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     this.loadDepartments();
@@ -79,12 +78,6 @@ export class StaffAddComponent {
     });
   }
 
-  filterDepartment(event: AutoCompleteCompleteEvent): void {
-    const query = event.query.toLowerCase();
-    this.filteredDepartments = this.departments.filter((dep) =>
-      dep.name.toLowerCase().includes(query)
-    );
-  }
 
   validateInput(): boolean {
     if (

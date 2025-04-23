@@ -13,12 +13,9 @@ import { ActivitySummary } from '../../../../dto/response/activity-summary';
 import { ActivityService } from '../../../../service/activity.service';
 import { ActivityViewService } from '../../../../service/activity-view.service';
 import { AuthService } from '../../../../service/auth.service';
+import { BaseFilterComponent } from '../../../../core/BaseFilterComponent';
 
 declare var bootstrap: any;
-interface AutoCompleteCompleteEvent {
-  originalEvent: Event;
-  query: string;
-}
 interface status{
   name: string;
   code: String;
@@ -29,7 +26,7 @@ interface status{
   templateUrl: './class-activity-list.component.html',
   styleUrl: './class-activity-list.component.css',
 })
-export class ClassActivityListComponent implements OnInit {
+export class ClassActivityListComponent extends BaseFilterComponent implements OnInit {
   classActivityList: ClassActivityResponse[] = [];
   rows: number = 7;
   first: number = 0;
@@ -74,7 +71,9 @@ export class ClassActivityListComponent implements OnInit {
     private route: ActivatedRoute,
     private activityViewService: ActivityViewService,
     public authService: AuthService
-  ) {}
+  ) {
+    super();
+  }
 
   getSeverity(status: string) {
     switch (status) {
@@ -157,18 +156,6 @@ export class ClassActivityListComponent implements OnInit {
       });
   }
 
-  filterDepartment(event: AutoCompleteCompleteEvent) {
-    let filtered: any[] = [];
-    let query = event.query;
-
-    for (let i = 0; i < (this.departments as any[]).length; i++) {
-      let department = (this.departments as any[])[i];
-      if (department.name.toLowerCase().indexOf(query.toLowerCase()) == 0) {
-        filtered.push(department);
-      }
-    }
-    this.filteredDepartments = filtered;
-  }
 
   navigateAttendance(id: number){
     this.router.navigate(['/my-class/activity/attendance', id]);
@@ -178,52 +165,8 @@ export class ClassActivityListComponent implements OnInit {
     this.router.navigate(['/activity/attendance', id]);
   }
 
-  
-
-  filterCourse(event: AutoCompleteCompleteEvent) {
-    let filtered: any[] = [];
-    let query = event.query;
-
-    for (let i = 0; i < (this.courses as any[]).length; i++) {
-      let course = (this.courses as any[])[i];
-      if (course.name.toLowerCase().indexOf(query.toLowerCase()) == 0) {
-        filtered.push(course);
-      }
-    }
-
-    this.filteredCourses = filtered;
-  }
-
-  filterClass(event: AutoCompleteCompleteEvent) {
-    let filtered: any[] = [];
-    let query = event.query;
-
-    for (let i = 0; i < (this.classes as any[]).length; i++) {
-      let clazz = (this.classes as any[])[i];
-      if (clazz.name.toLowerCase().indexOf(query.toLowerCase()) == 0) {
-        filtered.push(clazz);
-      }
-    }
-
-    this.filteredClasses = filtered;
-  }
-
   isPlanned(status: string): boolean {
     return status === 'PLANNED';
-  }
-
-  filterActivity(event: AutoCompleteCompleteEvent) {
-    let filtered: any[] = [];
-    let query = event.query;
-
-    for (let i = 0; i < (this.activities as any[]).length; i++) {
-      let activity = (this.activities as any[])[i];
-      if (activity.name.toLowerCase().indexOf(query.toLowerCase()) == 0) {
-        filtered.push(activity);
-      }
-    }
-
-    this.filteredActivities = filtered;
   }
 
   

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from './service/auth.service';
 import { WebSocketService } from './service/websocket.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-root',
@@ -10,7 +11,8 @@ import { WebSocketService } from './service/websocket.service';
 export class AppComponent implements OnInit {
   title = 'qnu';
 
-  constructor(private authService:AuthService, private websocketService: WebSocketService){}
+  constructor(private authService:AuthService, private websocketService: WebSocketService){
+  }
 
   ngOnInit(): void {
     this.authService.checkToken();

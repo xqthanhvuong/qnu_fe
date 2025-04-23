@@ -136,7 +136,7 @@ export class CourseListComponent implements OnInit {
   downloadCSVTemplate() {
     const link = document.createElement('a');
     link.href = 'http://localhost:8000/AMQNU/api/courses/download-template'; // API tải file mẫu
-    link.download = 'departments_template.csv';
+    link.download = 'batch_sample.xlsx';
     link.click();
   }
 }

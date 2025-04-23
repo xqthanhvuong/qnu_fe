@@ -5,18 +5,14 @@ import { DepartmentService } from '../../../../service/department.service';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LecturerRequest } from '../../../../dto/request/lecturer-request';
-
-interface AutoCompleteCompleteEvent {
-  originalEvent: Event;
-  query: string;
-}
+import { BaseFilterComponent } from '../../../../core/BaseFilterComponent';
 
 @Component({
   selector: 'app-lecturer-add',
   templateUrl: './lecturer-add.component.html',
   styleUrl: './lecturer-add.component.css'
 })
-export class LecturerAddComponent implements OnInit {
+export class LecturerAddComponent extends BaseFilterComponent implements OnInit {
   isEditMode = false;
   lecturerId: number | null = null;
   name: string = '';
@@ -46,7 +42,9 @@ export class LecturerAddComponent implements OnInit {
     private toastr: ToastrService,
     private route: ActivatedRoute,
     private router: Router
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     this.loadDepartments();
@@ -85,13 +83,6 @@ export class LecturerAddComponent implements OnInit {
         ) ?? null;
       }
     });
-  }
-
-  filterDepartment(event: AutoCompleteCompleteEvent): void {
-    const query = event.query.toLowerCase();
-    this.filteredDepartments = this.departments.filter((dep) =>
-      dep.name.toLowerCase().includes(query)
-    );
   }
 
   validateInput(): boolean {

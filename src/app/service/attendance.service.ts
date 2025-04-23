@@ -6,12 +6,13 @@ import { RollCallRequest } from '../dto/request/roll-call-request';
 import { RollCallResponse } from '../dto/response/roll-call-response';
 import { AttendanceRecordRequest } from '../dto/request/attendance-record-request';
 import { AttendanceRecord } from '../dto/response/attendance-record';
+import { enviroment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AttendanceService {
-  private baseUrl = 'http://localhost:8000/AMQNU/api/attendance';
+  private baseUrl = enviroment.apiURL + 'attendance';
 
   constructor(private http: HttpClient) {}
 

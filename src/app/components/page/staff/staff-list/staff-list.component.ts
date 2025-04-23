@@ -7,19 +7,16 @@ import { debounceTime, fromEvent } from 'rxjs';
 import { DepartmentResponse } from '../../../../dto/response/department-response';
 import { DepartmentService } from '../../../../service/department.service';
 import { AuthService } from '../../../../service/auth.service';
+import { BaseFilterComponent } from '../../../../core/BaseFilterComponent';
 
 declare var bootstrap: any;
-interface AutoCompleteCompleteEvent {
-  originalEvent: Event;
-  query: string;
-}
 
 @Component({
   selector: 'app-staff-list',
   templateUrl: './staff-list.component.html',
   styleUrl: './staff-list.component.css'
 })
-export class StaffListComponent implements OnInit {
+export class StaffListComponent extends BaseFilterComponent implements OnInit {
   staffs: StaffResponse[] = [];
   totalRecords: number = 0;
   rows: number = 7;
@@ -34,6 +31,7 @@ export class StaffListComponent implements OnInit {
   selectedDepartmentId: number | null = null;
   itemIdToDelete: number | null = null;
   private modalInstance: any;
+  fileName: string = '';
 
 
   constructor(
@@ -42,7 +40,9 @@ export class StaffListComponent implements OnInit {
     private toastr: ToastrService,
     private departmentService: DepartmentService,
     public authService: AuthService
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     this.loadStaffs({ page: 0, rows: this.rows });
@@ -128,14 +128,6 @@ export class StaffListComponent implements OnInit {
     modalInstance.hide();
   }
 
-  filterDepartment(event: AutoCompleteCompleteEvent) {
-    let query = event.query.toLowerCase();
-
-    this.filteredDepartments = this.departments.filter((dep) =>
-      dep.name.toLowerCase().includes(query)
-    );
-  }
-
   loadFilters(): void {
     this.departmentService.getDepartmentSummary().subscribe((response) => {
       if (response.code === 200) {
@@ -152,15 +144,49 @@ export class StaffListComponent implements OnInit {
     link.click();
   }
 
-  onFileSelected(event: any) {
-    const file = event.target.files[0];
-    if (file && file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
+  onDragOver(event: DragEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+    const dropArea = event.target as HTMLElement;
+    dropArea.classList.add('drag-over');
+  }
+
+  // Xử lý khi thả file vào khu vực
+  onDrop(event: DragEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+    const dropArea = event.target as HTMLElement;
+    dropArea.classList.remove('drag-over');
+
+    const file = event.dataTransfer?.files[0];
+
+    if (
+      file &&
+      file.type ===
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    ) {
       this.selectedFile = file;
+      this.fileName = file.name;
     } else {
       this.toastr.error('Please select a valid Excel file.', 'Invalid File');
       this.selectedFile = null;
     }
-}
+  }
+
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (
+      file &&
+      file.type ===
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    ) {
+      this.selectedFile = file;
+      this.fileName = file.name;
+    } else {
+      this.toastr.error('Please select a valid Excel file.', 'Invalid File');
+      this.selectedFile = null;
+    }
+  }
 
 
   uploadCSVFile() {

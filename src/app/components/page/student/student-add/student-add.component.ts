@@ -6,18 +6,14 @@ import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StudentRequest } from '../../../../dto/request/student-request';
 import { Location } from '@angular/common';
-
-interface AutoCompleteCompleteEvent {
-  originalEvent: Event;
-  query: string;
-}
+import { BaseFilterComponent } from '../../../../core/BaseFilterComponent';
 
 @Component({
   selector: 'app-student-add',
   templateUrl: './student-add.component.html',
   styleUrl: './student-add.component.css'
 })
-export class StudentAddComponent implements OnInit {
+export class StudentAddComponent extends BaseFilterComponent implements OnInit {
   isEditMode = false;
   studentId: number | null = null;
 
@@ -50,7 +46,9 @@ export class StudentAddComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private location: Location
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     this.loadClasses();
@@ -93,13 +91,6 @@ export class StudentAddComponent implements OnInit {
         this.studentPosition = student.studentPosition;
       }
     });
-  }
-
-  filterClass(event: AutoCompleteCompleteEvent): void {
-    const query = event.query.toLowerCase();
-    this.filteredClasses = this.classes.filter((cls) =>
-      cls.name.toLowerCase().includes(query)
-    );
   }
 
   validateInput(): boolean {

@@ -7,18 +7,14 @@ import { CourseService } from '../../../../service/course.service';
 import { DepartmentResponse } from '../../../../dto/response/department-response';
 import { CourseResponse } from '../../../../dto/response/course-response';
 import { ClassRequest } from '../../../../dto/request/class-request';
-
-interface AutoCompleteCompleteEvent {
-  originalEvent: Event;
-  query: string;
-}
+import { BaseFilterComponent } from '../../../../core/BaseFilterComponent';
 
 @Component({
   selector: 'app-class-add',
   templateUrl: './class-add.component.html',
   styleUrl: './class-add.component.css',
 })
-export class ClassAddComponent {
+export class ClassAddComponent extends BaseFilterComponent {
   isEditMode = false;
   departments: DepartmentResponse[] = [];
   courses: CourseResponse[] = [];
@@ -38,7 +34,9 @@ export class ClassAddComponent {
     private route: ActivatedRoute,
     private departmentService: DepartmentService,
     private courseService: CourseService
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     this.loadFilters();
@@ -109,20 +107,6 @@ export class ClassAddComponent {
     });
   }
 
-  filterCourse(event: AutoCompleteCompleteEvent) {
-    let filtered: any[] = [];
-    let query = event.query;
-
-    for (let i = 0; i < (this.courses as any[]).length; i++) {
-      let course = (this.courses as any[])[i];
-      if (course.name.toLowerCase().indexOf(query.toLowerCase()) == 0) {
-        filtered.push(course);
-      }
-    }
-
-    this.filteredCourses = filtered;
-  }
-
   addClass() {
     if (
       this.selectedCourse === null ||
@@ -151,20 +135,5 @@ export class ClassAddComponent {
         }
       });
   }
-
-  filterDepartment(event: AutoCompleteCompleteEvent) {
-    let filtered: any[] = [];
-    let query = event.query;
-
-    for (let i = 0; i < (this.departments as any[]).length; i++) {
-      let department = (this.departments as any[])[i];
-      if (department.name.toLowerCase().indexOf(query.toLowerCase()) == 0) {
-        filtered.push(department);
-      }
-    }
-
-    this.filteredDepartments = filtered;
-  }
-
 
 }

@@ -11,20 +11,16 @@ import { DepartmentService } from '../../../../service/department.service';
 import { ClassResponse } from '../../../../dto/response/class-response';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../../service/auth.service';
+import { BaseFilterComponent } from '../../../../core/BaseFilterComponent';
 
 
 declare var bootstrap: any;
-interface AutoCompleteCompleteEvent {
-  originalEvent: Event;
-  query: string;
-}
-
 @Component({
   selector: 'app-student-list',
   templateUrl: './student-list.component.html',
   styleUrl: './student-list.component.css'
 })
-export class StudentListComponent implements OnInit {
+export class StudentListComponent extends BaseFilterComponent implements OnInit {
   students: StudentResponse[] = [];
   totalRecords: number = 0;
   rows: number = 7;
@@ -47,6 +43,7 @@ export class StudentListComponent implements OnInit {
   selectedDepartmentId: number | null = null;
   selectedClassId: number | null = null;
   selectedFile: File | null = null;
+  fileName: string = '';
 
 
   constructor(
@@ -57,7 +54,9 @@ export class StudentListComponent implements OnInit {
     private classService: ClassService,
     private router: Router,
     public authService: AuthService
-  ) {}
+  ) {
+    super();
+  }
   ngOnInit(): void {
     this.loadStudents({ page: 0, rows: this.rows });
     this.initializeSearch();
@@ -146,32 +145,6 @@ export class StudentListComponent implements OnInit {
     modalInstance.hide();
   }
 
-
-  filterDepartment(event: AutoCompleteCompleteEvent) {
-    let query = event.query.toLowerCase();
-
-    this.filteredDepartments = this.departments.filter((dep) =>
-      dep.name.toLowerCase().includes(query)
-    );
-  }
-
-  filterCourse(event: AutoCompleteCompleteEvent) {
-    let query = event.query.toLowerCase();
-
-    this.filteredCourses = this.courses.filter((dep) =>
-      dep.name.toLowerCase().includes(query)
-    );
-  }
-
-  filterClass(event: AutoCompleteCompleteEvent) {
-    let query = event.query.toLowerCase();
-
-    this.filteredClasses = this.classes.filter((dep) =>
-      dep.name.toLowerCase().includes(query)
-    );
-  }
-
-
   loadFilters(): void {
     this.departmentService.getDepartmentSummary().subscribe((response) => {
       if (response.code === 200) {
@@ -197,17 +170,7 @@ export class StudentListComponent implements OnInit {
     link.click();
   }
 
-  onFileSelected(event: any) {
-    const file = event.target.files[0];
-    if (file && file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
-      this.selectedFile = file;
-    } else {
-      this.toastr.error('Please select a valid Excel file.', 'Invalid File');
-      this.selectedFile = null;
-    }
-}
-
-
+  
   uploadCSVFile() {
     if (this.selectedFile) {
       this.studentService.uploadCSV(this.selectedFile).subscribe(
@@ -227,6 +190,51 @@ export class StudentListComponent implements OnInit {
       );
     } else {
       this.toastr.warning('Please select a CSV file to upload.', 'Warning');
+    }
+  }
+
+
+  onDragOver(event: DragEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+    const dropArea = event.target as HTMLElement;
+    dropArea.classList.add('drag-over');
+  }
+
+  // Xử lý khi thả file vào khu vực
+  onDrop(event: DragEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+    const dropArea = event.target as HTMLElement;
+    dropArea.classList.remove('drag-over');
+
+    const file = event.dataTransfer?.files[0];
+
+    if (
+      file &&
+      file.type ===
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    ) {
+      this.selectedFile = file;
+      this.fileName = file.name;
+    } else {
+      this.toastr.error('Please select a valid Excel file.', 'Invalid File');
+      this.selectedFile = null;
+    }
+  }
+
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (
+      file &&
+      file.type ===
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    ) {
+      this.selectedFile = file;
+      this.fileName = file.name;
+    } else {
+      this.toastr.error('Please select a valid Excel file.', 'Invalid File');
+      this.selectedFile = null;
     }
   }
 }

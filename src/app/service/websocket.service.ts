@@ -5,13 +5,16 @@ import { AuthService } from './auth.service';
 import { JsonResponse } from '../dto/response/json-response';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { enviroment } from '../../environments/environment';
+
+
 
 @Injectable({
   providedIn: 'root',
 })
 export class WebSocketService {
   private socket: WebSocket | null = null;
-  private baseUrl = 'http://localhost:8000/AMQNU/api/notifications';
+  private baseUrl = enviroment.apiURL + 'notifications';
   private reconnectAttempts = 0;
   private maxReconnectAttempts = 5;
   private reconnectInterval = 1000;
@@ -50,7 +53,7 @@ export class WebSocketService {
     }
 
     const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
-    const socketUrl = `${protocol}://localhost:8000/AMQNU/api/ws/notifications?token=${token}`;
+    const socketUrl = `${protocol}://${enviroment.socketURL}?token=${token}`;
     this.socket = new WebSocket(socketUrl);
 
     this.socket.onopen = () => {

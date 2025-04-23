@@ -1,6 +1,6 @@
 <div class="rounded-4 w-100 h-100" style="position: relative">
   <div class="d-flex align-items-center mb-2">
-    <div class="fs-4 fw-bold">Class</div>
+    <div class="fs-4 fw-bold">{{"CLASS" | translate}}</div>
     <div class="mx-2">
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -20,10 +20,10 @@
       </svg>
     </div>
     <div *ngIf="!isEditMode; else editDepartmentMode" class="fs-4 fw-bold">
-      Add New Class
+      {{"ADD_NEW_CLASS" | translate}}
     </div>
     <ng-template #editDepartmentMode>
-      <div class="fs-4 fw-bold">Edit Class</div>
+      <div class="fs-4 fw-bold">{{"EDIT_CLASS" | translate}}</div>
     </ng-template>
   </div>
   <div>
@@ -32,7 +32,7 @@
         <div class="row px-3">
           <div class="col-5">
             <div class="mb-3">
-              <label for="className" class="form-label">Class Name</label>
+              <label for="className" class="form-label w-90">{{"CLASS_NAME" | translate}}</label>
               <input
                 pInputText
                 [(ngModel)]="className"
@@ -44,14 +44,14 @@
               />
             </div>
             <div class="my-3 w-90">
-              <label for="departmentName" class="form-label"
-                >Department Name</label
+              <label for="departmentName" class="form-label w-90"
+                >{{"DEPARTMENT_NAME" | translate}}</label
               >
               <p-autoComplete
                 [(ngModel)]="selectedDepartment"
                 [dropdown]="true"
                 [suggestions]="filteredDepartments"
-                (completeMethod)="filterDepartment($event)"
+                (completeMethod)="filterGeneric($event, 'departments', 'filteredDepartments')"
                 optionLabel="name"
                 placeholder="Enter department name"
                 tabindex="2"
@@ -64,7 +64,7 @@
                     (click)="addClass()"
                     tabindex="4"
                 >
-                    Add Now
+                    {{"ADD_NOW" | translate}}
                 </button>
             </div>
             <div *ngIf="isEditMode">
@@ -74,18 +74,18 @@
                   (click)="updateClass()"
                   tabindex="4"
               >
-                  Edit Now
+                  {{"UPDATE_NOW" | translate}}
               </button>
           </div>
           </div>
           <div class="col-5">
             <div class="w-90 mb-3">
-                <label for="courseName" class="form-label">Batch Name</label>
+                <label for="courseName" class="form-label w-90">{{"BATCH_NAME" | translate}}</label>
                 <p-autoComplete
                 [(ngModel)]="selectedCourse"
                 [dropdown]="true"
                 [suggestions]="filteredCourses"
-                (completeMethod)="filterCourse($event)"
+                (completeMethod)="filterGeneric($event, 'courses', 'filteredCourses')"
                 optionLabel="name"
                 placeholder="Enter batch name"
                 tabindex="3"
@@ -93,7 +93,7 @@
             </div>
             <div class="w-90 my-3">
                 <div>
-                    <label for="duration" class="form-label">Duration Years</label>
+                    <label for="duration" class="form-label w-90">{{"DURATION_YEAR" | translate}}</label>
                 </div>
                 <p-dropdown 
             [(ngModel)]="selectedDuration"

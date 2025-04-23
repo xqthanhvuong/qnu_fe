@@ -4,12 +4,13 @@ import { Observable } from 'rxjs';
 import { JsonResponse } from '../dto/response/json-response';
 import { PagedResponse } from '../dto/response/paged-response';
 import { ClassActivityResponse } from '../dto/response/class-activity-response';
+import { enviroment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ClassActivityService {
-  private baseUrl = 'http://localhost:8000/AMQNU/api/class-activity';
+  private baseUrl = enviroment.apiURL  + 'class-activity';
 
   constructor(private http: HttpClient) { }
 

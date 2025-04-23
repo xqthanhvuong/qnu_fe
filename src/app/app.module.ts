@@ -11,7 +11,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { LayoutPrimaryComponent } from './components/layout/layout-primary/layout-primary.component';
 import { UserComponent } from './components/page/user/user.component';
-import { HttpClientModule, provideHttpClient, withFetch } from '@angular/common/http';
+import { HttpClient, HttpClientModule, provideHttpClient, withFetch } from '@angular/common/http';
 import { AuthGuard } from './guard/auth.guard';
 import { LayoutSidebarComponent } from './components/layout/layout-sidebar/layout-sidebar.component';
 import { ButtonModule } from 'primeng/button';
@@ -67,8 +67,14 @@ import { ActivityViewComponent } from './components/page/activity/activity-view/
 import { ActivityMinutesComponent } from './components/page/activity/activity-minutes/activity-minutes.component';
 import { NotificationComponent } from './components/page/notification/notification.component';
 import { RelativeTimePipe } from './relative-time.pipe';
+import { ChangePasswordComponent } from './components/auth/change-password/change-password.component';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+}
 
 @NgModule({
   declarations: [
@@ -106,7 +112,8 @@ import { RelativeTimePipe } from './relative-time.pipe';
     ActivityViewComponent,
     ActivityMinutesComponent,
     NotificationComponent,
-    RelativeTimePipe
+    RelativeTimePipe,
+    ChangePasswordComponent
   ],
   imports: [
     BrowserModule,
@@ -116,6 +123,13 @@ import { RelativeTimePipe } from './relative-time.pipe';
     InputTextModule,
     PasswordModule,
     HttpClientModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      }
+    }),
     ButtonModule,
     RadioButtonModule,
     ToastModule,

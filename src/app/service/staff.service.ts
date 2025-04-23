@@ -5,12 +5,14 @@ import { Observable } from 'rxjs';
 import { PagedResponse } from '../dto/response/paged-response';
 import { StaffRequest } from '../dto/request/staff-request';
 import { StaffResponse } from '../dto/response/staff-response';
+import { enviroment } from '../../environments/environment';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class StaffService {
-  private baseUrl = 'http://localhost:8000/AMQNU/api/staffs';
+  private baseUrl = enviroment.apiURL + 'staffs';
   private staffRequest: StaffRequest | null = null;
 
   constructor(private http: HttpClient) { }

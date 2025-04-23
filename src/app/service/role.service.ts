@@ -7,14 +7,15 @@ import { RoleDetailResponse } from '../dto/response/role-detail-response';
 import { PagedResponse } from '../dto/response/paged-response';
 import { RoleResponse } from '../dto/response/role-response';
 import { AccountHaveRole } from '../dto/response/account-have-role';
+import { enviroment } from '../../environments/environment';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class RoleService {
-  private baseUrl = 'http://localhost:8000/AMQNU/api/roles';
-  private permissionUrl = 'http://localhost:8000/AMQNU/api/permissions';
+  private baseUrl = enviroment.apiURL + 'roles';
+  private permissionUrl = enviroment.apiURL + 'permissions';
 
   constructor(private http: HttpClient) { }
 

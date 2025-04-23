@@ -165,12 +165,12 @@ export class ActivityAddComponent implements OnInit {
     this.files.forEach((file: File) => {
       this.totalSize += file.size;
     });
-    this.totalSizePercent = (this.totalSize / 20000000) * 100; 
+    this.totalSizePercent = (this.totalSize / 200000000) * 100; 
   }
 
   handleFileRemove(event: any) {
     this.totalSize -= event.file.size;
-    this.totalSizePercent = (this.totalSize / 20000000) * 100;
+    this.totalSizePercent = (this.totalSize / 200000000) * 100;
 
     this.messageService.add({ severity: 'info', summary: 'Removed', detail: `${event.file.name} đã được xóa.`, life: 3000 });
   }

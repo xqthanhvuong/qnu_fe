@@ -24,6 +24,7 @@ export class DepartmentListComponent implements OnInit {
   private modalInstance: any;
   selectedDepartment: DepartmentResponse | null = null;
   selectedFile: File | null = null;
+  fileName: string = '';
 
   constructor(
     private departmentService: DepartmentService,
@@ -116,40 +117,73 @@ export class DepartmentListComponent implements OnInit {
   downloadCSVTemplate() {
     const link = document.createElement('a');
     link.href = 'http://localhost:8000/AMQNU/api/departments/download-template'; // API tải file mẫu
-    link.download = 'departments_template.csv';
+    link.download = 'departments_template.xlsx';
     link.click();
   }
-
-  onFileSelected(event: any) {
-    const file = event.target.files[0];
-    if (file && file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
-      this.selectedFile = file;
-    } else {
-      this.toastr.error('Please select a valid Excel file.', 'Invalid File');
-      this.selectedFile = null;
-    }
-}
-
 
   uploadCSVFile() {
     if (this.selectedFile) {
       this.departmentService.uploadCSV(this.selectedFile).subscribe(
         (response) => {
           if (response.code === 200) {
-            this.toastr.success('CSV file uploaded successfully!', 'Success');
+            this.toastr.success('File uploaded successfully!', 'Success');
             this.selectedFile = null;
             return;
           }
-          console.error('Error uploading CSV');
-          this.toastr.error('Failed to upload CSV file.', 'Error');
+          console.error('Error uploading');
+          this.toastr.error('Failed to upload file.', 'Error');
         },
         (error) => {
-          console.error('Error uploading CSV:', error);
-          this.toastr.error('Failed to upload CSV file.', 'Error');
+          console.error('Error uploading:', error);
+          this.toastr.error('Failed to upload file.', 'Error');
         }
       );
     } else {
-      this.toastr.warning('Please select a CSV file to upload.', 'Warning');
+      this.toastr.warning('Please select a file to upload.', 'Warning');
+    }
+  }
+
+  onDragOver(event: DragEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+    const dropArea = event.target as HTMLElement;
+    dropArea.classList.add('drag-over');
+  }
+
+  // Xử lý khi thả file vào khu vực
+  onDrop(event: DragEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+    const dropArea = event.target as HTMLElement;
+    dropArea.classList.remove('drag-over');
+
+    const file = event.dataTransfer?.files[0];
+
+    if (
+      file &&
+      file.type ===
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    ) {
+      this.selectedFile = file;
+      this.fileName = file.name;
+    } else {
+      this.toastr.error('Please select a valid Excel file.', 'Invalid File');
+      this.selectedFile = null;
+    }
+  }
+
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (
+      file &&
+      file.type ===
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    ) {
+      this.selectedFile = file;
+      this.fileName = file.name;
+    } else {
+      this.toastr.error('Please select a valid Excel file.', 'Invalid File');
+      this.selectedFile = null;
     }
   }
 }

@@ -5,12 +5,14 @@ import { DepartmentRequest } from '../dto/request/department-request';
 import { DepartmentResponse } from '../dto/response/department-response';
 import { JsonResponse } from '../dto/response/json-response';
 import { PagedResponse } from '../dto/response/paged-response';
+import { enviroment } from '../../environments/environment';
+
 
 @Injectable({
   providedIn: 'root',
 })
 export class DepartmentService {
-  private baseUrl = 'http://localhost:8000/AMQNU/api/departments'; // Địa chỉ base cho API
+  private baseUrl = enviroment.apiURL + 'departments'; // Địa chỉ base cho API
   private departmentRequest: DepartmentRequest | null = null;
 
   constructor(private http: HttpClient) {}

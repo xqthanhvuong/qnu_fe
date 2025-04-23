@@ -22,7 +22,7 @@
             aria-current="page"
           >
             <i class="me-2 bi bi-grid-1x2-fill"></i>
-            Department
+            {{'DEPARTMENT' | translate}}
           </a>
         </li>
         <li class="nav-item"
@@ -38,7 +38,7 @@
             }"
           >
             <i class="me-2 bi bi-calendar-check-fill"></i>
-            Batch
+            {{'BATCH' | translate}}
           </a>
         </li>
         <li class="nav-item"
@@ -54,7 +54,7 @@
             }"
           >
             <i class="me-2 bi bi-person-video3"></i>
-            Lecturers
+            {{'LECTURER' | translate}}
           </a>
         </li>
         <li class="nav-item"
@@ -70,7 +70,7 @@
             }"
           >
             <i class="me-2 bi bi-person-workspace"></i>
-            Staffs
+            {{'STAFF' | translate}}
           </a>
         </li>
         <li class="nav-item"
@@ -86,7 +86,7 @@
             }"
           >
             <i class="me-2 pi pi-users"></i>
-            Classes
+            {{'CLASS' | translate}}
           </a>
         </li>
         <li class="nav-item"
@@ -102,7 +102,7 @@
             }"
           >
             <i class="me-2 bi bi-mortarboard-fill"></i>
-            Students
+            {{'STUDENT' | translate}}
           </a>
         </li>
         <li class="nav-item"
@@ -118,7 +118,7 @@
             }"
           >
             <i class="me-2 bi bi-person-lines-fill"></i>
-            Academic Advisors
+            {{'ADVISOR' | translate}}
           </a>
         </li>
         <li class="nav-item" *ngIf="authService.checkPermissions('VIEW_ROLE')">
@@ -132,7 +132,7 @@
             }"
           >
             <i class="me-2 bi bi-person-bounding-box"></i>
-            Role
+            {{ 'ROLE' | translate }}
           </a>
         </li>
         <li class="nav-item" *ngIf="!isAdminRole() && !isRoleStudent()">
@@ -146,7 +146,7 @@
             }"
           >
             <i class="bi bi-easel3-fill me-2"></i>
-            My class
+            {{ 'MY_CLASS' | translate}}
           </a>
         </li>
         <li class="nav-item" *ngIf="isRoleStudent()">
@@ -160,7 +160,7 @@
             }"
           >
             <i class="bi bi-easel3-fill me-2"></i>
-            My class
+            {{ 'MY_CLASS' | translate}}
           </a>
         </li>
         <li class="nav-item"
@@ -176,8 +176,7 @@
             }"
           >
             <i class="bi bi-card-checklist me-2"></i>
-
-            Activity
+            {{'ACTIVITY' | translate}}
           </a>
         </li>
       </ul>
@@ -200,7 +199,8 @@
           <strong>{{ username }}</strong>
         </a>
         <ul
-          class="dropdown-menu h-10 text-small shadow"
+        style="z-index: 1000;"
+          class="dropdown-menu text-small shadow"
           aria-labelledby="dropdownUser2"
         >
           <li><a class="dropdown-item" href="#">New project...</a></li>

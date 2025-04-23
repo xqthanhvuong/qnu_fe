@@ -1,10 +1,10 @@
 <div class="rounded-4 w-100 h-100" style="position: relative">
   <div class="d-flex">
     <div class="fs-4 fw-bold mb-2 me-2">
-      Activity Guide 
+      {{"GUIDE" | translate}}
     </div>
     <div *ngIf="isDetail" class="fs-4 fw-bold mb-2">
-      Of Activity
+      {{"OF_ACTIVITY" | translate}}
     </div>
   </div>
 
@@ -27,7 +27,7 @@
           class="btn btn-primary me-4"
           (click)="addGuide()"
         >
-          Add a new guide
+          {{"ADD_NEW_GUIDE" | translate}}
         </button>
       </div>
   </div>
@@ -43,10 +43,10 @@
     >
         <ng-template pTemplate="header">
           <tr>
-              <th style="width:65%">Name</th>
-              <th style="width:10%">Link</th>
-              <th style="width:10%">created At</th>
-              <th style="width:15%">Action</th>
+              <th style="width:65%">{{"NAME" | translate}}</th>
+              <th style="width:10%">{{"LINK" | translate}}</th>
+              <th style="width:10%">{{"CREATE_AT" | translate}}</th>
+              <th style="width:15%">{{"ACTION" | translate}}</th>
           </tr>
       </ng-template>
       <ng-template pTemplate="body" let-activityGuide >
@@ -60,28 +60,7 @@
                 class="me-2 cursor-pointer"
 
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                >
-                  <path
-                    d="M9.02992 13.9999C8.63992 13.4299 8.41992 12.7399 8.41992 11.9999C8.41992 10.0199 10.0199 8.41992 11.9999 8.41992C13.9799 8.41992 15.5799 10.0199 15.5799 11.9999C15.5799 13.9799 13.9799 15.5799 11.9999 15.5799"
-                    stroke="#292D32"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                  <path
-                    d="M17.5598 5.58047C15.8698 4.38047 13.9698 3.73047 11.9998 3.73047C8.46984 3.73047 5.17984 5.81047 2.88984 9.41047C1.98984 10.8205 1.98984 13.1905 2.88984 14.6005C5.17984 18.2005 8.46984 20.2805 11.9998 20.2805C15.5298 20.2805 18.8198 18.2005 21.1098 14.6005C22.0098 13.1905 22.0098 10.8205 21.1098 9.41047"
-                    stroke="#292D32"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
+              <img src="assets/icons/eye.svg" alt="Arrow" />
               </div>
               
               <div
@@ -90,98 +69,15 @@
                 (click)="openDeleteModal(activityGuide.id)"
                 *ngIf="(activityGuide.department || !isDepartmentRole()) && !isActive('/my-class') "
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                >
-                  <path
-                    d="M21 5.98047C17.67 5.65047 14.32 5.48047 10.98 5.48047C9 5.48047 7.02 5.58047 5.04 5.78047L3 5.98047"
-                    stroke="#292D32"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                  <path
-                    d="M8.5 4.97L8.72 3.66C8.88 2.71 9 2 10.69 2H13.31C15 2 15.13 2.75 15.28 3.67L15.5 4.97"
-                    stroke="#292D32"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                  <path
-                    d="M18.8499 9.13965L18.1999 19.2096C18.0899 20.7796 17.9999 21.9996 15.2099 21.9996H8.7899C5.9999 21.9996 5.9099 20.7796 5.7999 19.2096L5.1499 9.13965"
-                    stroke="#292D32"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                  <path
-                    d="M10.3301 16.5H13.6601"
-                    stroke="#292D32"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                  <path
-                    d="M9.5 12.5H14.5"
-                    stroke="#292D32"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
+              <img src="assets/icons/bin.svg" alt="Arrow" />
               </div>
               <div
                     style="cursor:not-allowed;"
                     data-bs-toggle="modal"
                     *ngIf="!activityGuide.department && isDepartmentRole()"
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                    >
-                      <path
-                        d="M21 5.98047C17.67 5.65047 14.32 5.48047 10.98 5.48047C9 5.48047 7.02 5.58047 5.04 5.78047L3 5.98047"
-                        stroke="#ccc"
-                        stroke-width="1.5"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                      <path
-                        d="M8.5 4.97L8.72 3.66C8.88 2.71 9 2 10.69 2H13.31C15 2 15.13 2.75 15.28 3.67L15.5 4.97"
-                        stroke="#ccc"
-                        stroke-width="1.5"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                      <path
-                        d="M18.8499 9.13965L18.1999 19.2096C18.0899 20.7796 17.9999 21.9996 15.2099 21.9996H8.7899C5.9999 21.9996 5.9099 20.7796 5.7999 19.2096L5.1499 9.13965"
-                        stroke="#ccc"
-                        stroke-width="1.5"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                      <path
-                        d="M10.3301 16.5H13.6601"
-                        stroke="#ccc"
-                        stroke-width="1.5"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                      <path
-                        d="M9.5 12.5H14.5"
-                        stroke="#ccc"
-                        stroke-width="1.5"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                    </svg>
+              <img src="assets/icons/binnotallow.svg" alt="Arrow" />
+                    
                   </div>
             </div>
           </td>
@@ -195,10 +91,10 @@
         >
           <thead class="table-light">
             <tr>
-              <th>Name</th>
-              <th>Link</th>
-              <th>Created At</th>
-              <th>Action</th>
+              <th>{{"NAME" | translate}}</th>
+              <th>{{"LINK" | translate}}</th>
+              <th>{{"CREATE_AT" | translate}}</th>
+              <th>{{"ACTION" | translate}}</th>
             </tr>
           </thead>
           <tbody>
@@ -212,28 +108,7 @@
                     class="me-2 cursor-pointer"
 
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                    >
-                      <path
-                        d="M9.02992 13.9999C8.63992 13.4299 8.41992 12.7399 8.41992 11.9999C8.41992 10.0199 10.0199 8.41992 11.9999 8.41992C13.9799 8.41992 15.5799 10.0199 15.5799 11.9999C15.5799 13.9799 13.9799 15.5799 11.9999 15.5799"
-                        stroke="#292D32"
-                        stroke-width="1.5"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                      <path
-                        d="M17.5598 5.58047C15.8698 4.38047 13.9698 3.73047 11.9998 3.73047C8.46984 3.73047 5.17984 5.81047 2.88984 9.41047C1.98984 10.8205 1.98984 13.1905 2.88984 14.6005C5.17984 18.2005 8.46984 20.2805 11.9998 20.2805C15.5298 20.2805 18.8198 18.2005 21.1098 14.6005C22.0098 13.1905 22.0098 10.8205 21.1098 9.41047"
-                        stroke="#292D32"
-                        stroke-width="1.5"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                    </svg>
+                    <img src="assets/icons/eye.svg" alt="eye" />
                   </div>
                   
                   <div
@@ -242,49 +117,7 @@
                     
                     (click)="openDeleteModal(department.id)"
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                    >
-                      <path
-                        d="M21 5.98047C17.67 5.65047 14.32 5.48047 10.98 5.48047C9 5.48047 7.02 5.58047 5.04 5.78047L3 5.98047"
-                        stroke="#292D32"
-                        stroke-width="1.5"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                      <path
-                        d="M8.5 4.97L8.72 3.66C8.88 2.71 9 2 10.69 2H13.31C15 2 15.13 2.75 15.28 3.67L15.5 4.97"
-                        stroke="#292D32"
-                        stroke-width="1.5"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                      <path
-                        d="M18.8499 9.13965L18.1999 19.2096C18.0899 20.7796 17.9999 21.9996 15.2099 21.9996H8.7899C5.9999 21.9996 5.9099 20.7796 5.7999 19.2096L5.1499 9.13965"
-                        stroke="#292D32"
-                        stroke-width="1.5"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                      <path
-                        d="M10.3301 16.5H13.6601"
-                        stroke="#292D32"
-                        stroke-width="1.5"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                      <path
-                        d="M9.5 12.5H14.5"
-                        stroke="#292D32"
-                        stroke-width="1.5"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                    </svg>
+                    <img src="assets/icons/bin.svg" alt="bin" />
                   </div>
                   
                 </div>
@@ -300,7 +133,7 @@
       style="position: absolute; bottom: 0; padding: 10px 10px 0 0 "
     >
     <div class="d-flex align-items-center">
-      Total record count: {{ totalRecords }}
+      {{"TOTAL_RECORD_COUNT" | translate}}: {{ totalRecords }}
     </div>
     <p-paginator 
     (onPageChange)="onPageChange($event)" 
@@ -316,15 +149,15 @@
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="deleteModalLabel">Confirm deletion</h5>
+          <h5 class="modal-title" id="deleteModalLabel">{{"CONFIRM_DELETE" | translate}}</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          Are you sure you want to delete this item?
+          {{ "DELETE_ITEM" | translate }}
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-          <button type="button" class="btn btn-danger" (click)="confirmDelete()">Yes</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{"NO" | translate}}</button>
+          <button type="button" class="btn btn-danger" (click)="confirmDelete()">{{"YES" | translate}}</button>
         </div>
       </div>
     </div>

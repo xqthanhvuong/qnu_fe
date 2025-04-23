@@ -7,19 +7,16 @@ import { DepartmentResponse } from '../../../../dto/response/department-response
 import { DepartmentService } from '../../../../service/department.service';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../../service/auth.service';
+import { BaseFilterComponent } from '../../../../core/BaseFilterComponent';
 
 declare var bootstrap: any;
-interface AutoCompleteCompleteEvent {
-  originalEvent: Event;
-  query: string;
-}
 
 @Component({
   selector: 'app-lecturer-list',
   templateUrl: './lecturer-list.component.html',
   styleUrls: ['./lecturer-list.component.css'],
 })
-export class LecturerListComponent implements OnInit {
+export class LecturerListComponent extends BaseFilterComponent implements OnInit {
   lecturers: LecturerResponse[] = [];
   totalRecords: number = 0;
   rows: number = 7;
@@ -34,6 +31,7 @@ export class LecturerListComponent implements OnInit {
   departments: DepartmentResponse[] = [];
   filteredDepartments: DepartmentResponse[] = [];
   selectedDepartmentId: number | null = null;
+  fileName: string = '';
 
   constructor(
     private lecturerService: LecturerService,
@@ -41,7 +39,9 @@ export class LecturerListComponent implements OnInit {
     private departmentService: DepartmentService,
     private router: Router,
     public authService: AuthService
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     this.loadLecturers({ page: 0, rows: this.rows });
@@ -97,16 +97,6 @@ export class LecturerListComponent implements OnInit {
     const modalInstance = bootstrap.Modal.getInstance(modalElement);
     modalInstance.hide();
   }
-
-  filterDepartment(event: AutoCompleteCompleteEvent) {
-    let filtered: any[] = [];
-    let query = event.query.toLowerCase();
-
-    this.filteredDepartments = this.departments.filter((dep) =>
-      dep.name.toLowerCase().includes(query)
-    );
-  }
-
   
   openDeleteModal(id: number) {
     this.itemIdToDelete = id;
@@ -147,15 +137,49 @@ export class LecturerListComponent implements OnInit {
     link.click();
   }
 
-  onFileSelected(event: any) {
-    const file = event.target.files[0];
-    if (file && file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
+  onDragOver(event: DragEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+    const dropArea = event.target as HTMLElement;
+    dropArea.classList.add('drag-over');
+  }
+
+  // Xử lý khi thả file vào khu vực
+  onDrop(event: DragEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+    const dropArea = event.target as HTMLElement;
+    dropArea.classList.remove('drag-over');
+
+    const file = event.dataTransfer?.files[0];
+
+    if (
+      file &&
+      file.type ===
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    ) {
       this.selectedFile = file;
+      this.fileName = file.name;
     } else {
       this.toastr.error('Please select a valid Excel file.', 'Invalid File');
       this.selectedFile = null;
     }
-}
+  }
+
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (
+      file &&
+      file.type ===
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    ) {
+      this.selectedFile = file;
+      this.fileName = file.name;
+    } else {
+      this.toastr.error('Please select a valid Excel file.', 'Invalid File');
+      this.selectedFile = null;
+    }
+  }
 
 
   uploadCSVFile() {
@@ -163,20 +187,20 @@ export class LecturerListComponent implements OnInit {
       this.lecturerService.uploadCSV(this.selectedFile).subscribe(
         (response) => {
           if (response.code === 200) {
-            this.toastr.success('CSV file uploaded successfully!', 'Success');
+            this.toastr.success('File uploaded successfully!', 'Success');
             this.selectedFile = null;
             return;
           }
-          console.error('Error uploading CSV');
-          this.toastr.error('Failed to upload CSV file.', 'Error');
+          console.error('Error uploading File');
+          this.toastr.error('Failed to upload file.', 'Error');
         },
         (error) => {
           console.error('Error uploading CSV:', error);
-          this.toastr.error('Failed to upload CSV file.', 'Error');
+          this.toastr.error('Failed to upload file.', 'Error');
         }
       );
     } else {
-      this.toastr.warning('Please select a CSV file to upload.', 'Warning');
+      this.toastr.warning('Please select a file to upload.', 'Warning');
     }
   }
 

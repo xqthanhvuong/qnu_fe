@@ -10,14 +10,14 @@ export class RelativeTimePipe implements PipeTransform {
       return '';
     }
 
-    const date = parseISO(value); // Parse chuỗi thành đối tượng Date
+    const date = parseISO(value);
 
     if (isToday(date)) {
-      return `Today, ${format(date, 'h:mm a')}`; // Ví dụ: "Today, 5:00 PM"
+      return `Today, ${format(date, 'h:mm a')}`; 
     } else if (isYesterday(date)) {
-      return `Yesterday, ${format(date, 'h:mm a')}`; // Ví dụ: "Yesterday, 5:00 PM"
+      return `Yesterday, ${format(date, 'h:mm a')}`; 
     } else {
-      return format(date, 'MMM d, yyyy, h:mm a'); // Ví dụ: "Jan 3, 2025, 5:00 PM"
+      return format(date, 'MMM d, yyyy, h:mm a');
     }
   }
 }

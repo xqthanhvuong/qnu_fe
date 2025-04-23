@@ -11,6 +11,10 @@ import { isPlatformBrowser } from '@angular/common';
 import { WebSocketService } from '../../../service/websocket.service';
 import { NotificationResponse } from '../../../dto/response/notification-response';
 import { NotiService } from '../../../service/noti.service';
+import { TranslateService } from '@ngx-translate/core';
+import { LanguageService } from '../../../service/language.service';
+
+
 
 @Component({
   selector: 'app-layout-primary',
@@ -29,13 +33,16 @@ export class LayoutPrimaryComponent implements OnInit, OnDestroy {
   notifications: NotificationResponse[] = [];
   isPopupVisible: boolean = false;
   private isBrowser: boolean;
+  currentLanguage = 'en';
 
   constructor(
     private authService: AuthService,
     private router: Router,
     @Inject(PLATFORM_ID) private platformId: object,
     private websocketService: WebSocketService,
-    private notiService: NotiService
+    private notiService: NotiService,
+    private translate: TranslateService,
+    private languageService: LanguageService
   ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
   }
@@ -79,6 +86,7 @@ export class LayoutPrimaryComponent implements OnInit, OnDestroy {
     this.websocketService.notiCount$.subscribe((count) => {
       this.notiCount = count;
     });
+    this.currentLanguage = this.languageService.getLanguage();
   }
 
   logout(): void {
@@ -158,5 +166,11 @@ export class LayoutPrimaryComponent implements OnInit, OnDestroy {
       this.loadMoreNotifications();
       console.log('Load more notifications');
     }
+  }
+
+
+  switchLanguage(language: string) {
+    this.languageService.setLanguage(language); // Đổi ngôn ngữ
+    this.currentLanguage = language; // Cập nhật biến ngôn ngữ
   }
 }

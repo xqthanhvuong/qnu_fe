@@ -11,19 +11,16 @@ import { DepartmentService } from '../../../../service/department.service';
 import { CourseService } from '../../../../service/course.service';
 import { ClassService } from '../../../../service/class.service';
 import { AuthService } from '../../../../service/auth.service';
+import { BaseFilterComponent } from '../../../../core/BaseFilterComponent';
 
 declare var bootstrap: any;
-interface AutoCompleteCompleteEvent {
-  originalEvent: Event;
-  query: string;
-}
 
 @Component({
   selector: 'app-advisor-list',
   templateUrl: './advisor-list.component.html',
   styleUrls: ['./advisor-list.component.css']
 })
-export class AdvisorListComponent implements OnInit {
+export class AdvisorListComponent extends BaseFilterComponent implements OnInit {
   advisors: AdvisorResponse[] = [];
   totalRecords: number = 0;
   rows: number = 7;
@@ -53,6 +50,9 @@ export class AdvisorListComponent implements OnInit {
   selectedDepartmentId: number | null = null;
   selectedClassId: number | null = null;
 
+  selectedFile: File | null = null;
+  fileName: string = '';
+
   constructor(
     private advisorService: AdvisorService,
     private toastr: ToastrService,
@@ -61,7 +61,9 @@ export class AdvisorListComponent implements OnInit {
     private courseService: CourseService,
     private classService: ClassService,
     public authService: AuthService
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     this.loadAdvisors({ page: 0, rows: this.rows });
@@ -136,13 +138,6 @@ export class AdvisorListComponent implements OnInit {
     });
   }
 
-  filterAcademicYears(event: any): void {
-    const query = event.query.toLowerCase();
-    this.filteredAcademicYears = this.academicYears.filter((year) =>
-      year.toLowerCase().includes(query)
-    );
-  }
-
   onSelectedFilter() {
     if (this.selectedCourse != null) {
       this.selectedCourseId = this.selectedCourse.id;
@@ -157,50 +152,6 @@ export class AdvisorListComponent implements OnInit {
     const modalElement = this.filterModal.nativeElement;
     const modalInstance = bootstrap.Modal.getInstance(modalElement);
     modalInstance.hide();
-  }
-
-
-  
-  filterDepartment(event: AutoCompleteCompleteEvent) {
-    let filtered: any[] = [];
-    let query = event.query;
-
-    for (let i = 0; i < (this.departments as any[]).length; i++) {
-      let department = (this.departments as any[])[i];
-      if (department.name.toLowerCase().indexOf(query.toLowerCase()) == 0) {
-        filtered.push(department);
-      }
-    }
-
-    this.filteredDepartments = filtered;
-  }
-
-  filterCourse(event: AutoCompleteCompleteEvent) {
-    let filtered: any[] = [];
-    let query = event.query;
-
-    for (let i = 0; i < (this.courses as any[]).length; i++) {
-      let course = (this.courses as any[])[i];
-      if (course.name.toLowerCase().indexOf(query.toLowerCase()) == 0) {
-        filtered.push(course);
-      }
-    }
-
-    this.filteredCourses = filtered;
-  }
-
-  filterClass(event: AutoCompleteCompleteEvent) {
-    let filtered: any[] = [];
-    let query = event.query;
-
-    for (let i = 0; i < (this.classes as any[]).length; i++) {
-      let clazz = (this.classes as any[])[i];
-      if (clazz.name.toLowerCase().indexOf(query.toLowerCase()) == 0) {
-        filtered.push(clazz);
-      }
-    }
-
-    this.filteredClasses = filtered;
   }
 
   loadFilters(): void {
@@ -224,5 +175,78 @@ export class AdvisorListComponent implements OnInit {
         this.academicYears = response.result;
       }
     });
+  }
+
+  downloadCSVTemplate() {
+    const link = document.createElement('a');
+    link.href = 'http://localhost:8000/AMQNU/api/academic-advisors/download-template'; // API tải file mẫu
+    link.download = 'advisor_template.xlsx';
+    link.click();
+  }
+
+  uploadCSVFile() {
+    if (this.selectedFile) {
+      this.advisorService.uploadCSV(this.selectedFile).subscribe(
+        (response) => {
+          if (response.code === 200) {
+            this.toastr.success('File uploaded successfully!', 'Success');
+            this.selectedFile = null;
+            return;
+          }
+          console.error('Error uploading');
+          this.toastr.error('Failed to upload file.', 'Error');
+        },
+        (error) => {
+          console.error('Error uploading:', error);
+          this.toastr.error('Failed to upload file.', 'Error');
+        }
+      );
+    } else {
+      this.toastr.warning('Please select a file to upload.', 'Warning');
+    }
+  }
+
+  onDragOver(event: DragEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+    const dropArea = event.target as HTMLElement;
+    dropArea.classList.add('drag-over');
+  }
+
+  // Xử lý khi thả file vào khu vực
+  onDrop(event: DragEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+    const dropArea = event.target as HTMLElement;
+    dropArea.classList.remove('drag-over');
+
+    const file = event.dataTransfer?.files[0];
+
+    if (
+      file &&
+      file.type ===
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    ) {
+      this.selectedFile = file;
+      this.fileName = file.name;
+    } else {
+      this.toastr.error('Please select a valid Excel file.', 'Invalid File');
+      this.selectedFile = null;
+    }
+  }
+
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (
+      file &&
+      file.type ===
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    ) {
+      this.selectedFile = file;
+      this.fileName = file.name;
+    } else {
+      this.toastr.error('Please select a valid Excel file.', 'Invalid File');
+      this.selectedFile = null;
+    }
   }
 }

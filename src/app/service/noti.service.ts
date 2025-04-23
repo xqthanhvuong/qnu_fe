@@ -4,12 +4,14 @@ import { Observable } from 'rxjs';
 import { JsonResponse } from '../dto/response/json-response';
 import { PagedResponse } from '../dto/response/paged-response';
 import { NotificationResponse } from '../dto/response/notification-response';
+import { enviroment } from '../../environments/environment';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class NotiService {
-  private baseUrl = 'http://localhost:8000/AMQNU/api/notifications';
+  private baseUrl = enviroment.apiURL + 'notifications';
 
   constructor(private http: HttpClient) { }
 

@@ -4,12 +4,13 @@ import { Observable } from 'rxjs';
 import { JsonResponse } from '../dto/response/json-response';
 import { PagedResponse } from '../dto/response/paged-response';
 import { ActivityGuideResponse } from '../dto/response/activity-guide-response';
+import { enviroment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ActivityGuideService {
-  private baseUrl = 'http://localhost:8000/AMQNU/api/activity-guide';
+  private baseUrl = enviroment.apiURL + 'activity-guide';
 
   constructor(private http: HttpClient) { }
 

@@ -31,13 +31,15 @@ import { ClassActivityListComponent } from './components/page/activity/class-act
 import { AttendanceComponent } from './components/page/activity/attendance/attendance.component';
 import { ActivityViewComponent } from './components/page/activity/activity-view/activity-view.component';
 import { ActivityMinutesComponent } from './components/page/activity/activity-minutes/activity-minutes.component';
+import { ChangePasswordComponent } from './components/auth/change-password/change-password.component';
 
 const routes: Routes = [
   {
     path: '',
     component: LayoutPrimaryComponent,
     children: [
-      { path: 'login', component: LoginComponent }, 
+      { path: 'login', component: LoginComponent },
+      { path: 'change-password', component: ChangePasswordComponent }, 
       { path: '', component: LayoutSidebarComponent, canActivate: [AuthGuard],
         children: [
           {path: '', component: UserComponent},

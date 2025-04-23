@@ -7,18 +7,14 @@ import { ClassService } from '../../../../service/class.service';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AdvisorRequest } from '../../../../dto/request/advisor-tequest';
-
-interface AutoCompleteCompleteEvent {
-  originalEvent: Event;
-  query: string;
-}
+import { BaseFilterComponent } from '../../../../core/BaseFilterComponent';
 
 @Component({
   selector: 'app-advisor-add',
   templateUrl: './advisor-add.component.html',
   styleUrl: './advisor-add.component.css'
 })
-export class AdvisorAddComponent {
+export class AdvisorAddComponent extends BaseFilterComponent {
   isEditMode = false;
   advisorId: number | null = null;
 
@@ -40,7 +36,9 @@ export class AdvisorAddComponent {
     private toastr: ToastrService,
     private route: ActivatedRoute,
     private router: Router
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     this.loadLecturers();
@@ -87,19 +85,6 @@ export class AdvisorAddComponent {
     });
   }
 
-  filterLecturer(event: AutoCompleteCompleteEvent): void {
-    const query = event.query.toLowerCase();
-    this.filteredLecturers = this.lecturers.filter((lecturer) =>
-      lecturer.name.toLowerCase().includes(query)
-    );
-  }
-
-  filterClass(event: AutoCompleteCompleteEvent): void {
-    const query = event.query.toLowerCase();
-    this.filteredClasses = this.classes.filter((cls) =>
-      cls.name.toLowerCase().includes(query)
-    );
-  }
 
   validateInput(): boolean {
     if (!this.selectedLecturer || !this.selectedClass || !this.academicYear) {

@@ -3,12 +3,13 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { JsonResponse } from '../dto/response/json-response';
 import { ActivityViewResponse } from '../dto/response/activity-view-response';
+import { enviroment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ActivityViewService {
-  private baseUrl = 'http://localhost:8000/AMQNU/api/activity-view';
+  private baseUrl = enviroment.apiURL + 'activity-view';
 
   constructor(private http: HttpClient) { }
 

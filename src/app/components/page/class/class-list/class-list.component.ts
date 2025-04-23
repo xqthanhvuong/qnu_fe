@@ -9,19 +9,16 @@ import { CourseResponse } from '../../../../dto/response/course-response';
 import { DepartmentService } from '../../../../service/department.service';
 import { CourseService } from '../../../../service/course.service';
 import { AuthService } from '../../../../service/auth.service';
+import { StringUtils } from '../../../../until/StringUtils';
+import { BaseFilterComponent } from '../../../../core/BaseFilterComponent';
 
 declare var bootstrap: any;
-interface AutoCompleteCompleteEvent {
-  originalEvent: Event;
-  query: string;
-}
-
 @Component({
   selector: 'app-class-list',
   templateUrl: './class-list.component.html',
   styleUrl: './class-list.component.css',
 })
-export class ClassListComponent implements OnInit {
+export class ClassListComponent extends BaseFilterComponent implements OnInit {
   classes: ClassResponse[] = [];
   totalRecords: number = 0;
   rows: number = 7;
@@ -55,7 +52,9 @@ export class ClassListComponent implements OnInit {
     private departmentService: DepartmentService,
     private courseService: CourseService,
     public authService: AuthService
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     if(this.isActive("/my-class")){
@@ -172,34 +171,7 @@ export class ClassListComponent implements OnInit {
       }
     });
   }
-
-  filterCourse(event: AutoCompleteCompleteEvent) {
-    let filtered: any[] = [];
-    let query = event.query;
-
-    for (let i = 0; i < (this.courses as any[]).length; i++) {
-      let course = (this.courses as any[])[i];
-      if (course.name.toLowerCase().indexOf(query.toLowerCase()) == 0) {
-        filtered.push(course);
-      }
-    }
-
-    this.filteredCourses = filtered;
-  }
-
-  filterDepartment(event: AutoCompleteCompleteEvent) {
-    let filtered: any[] = [];
-    let query = event.query;
-
-    for (let i = 0; i < (this.departments as any[]).length; i++) {
-      let department = (this.departments as any[])[i];
-      if (department.name.toLowerCase().indexOf(query.toLowerCase()) == 0) {
-        filtered.push(department);
-      }
-    }
-
-    this.filteredDepartments = filtered;
-  }
+  
 
   editClass(clazz: ClassResponse) {
     this.classService.setClassRequest({

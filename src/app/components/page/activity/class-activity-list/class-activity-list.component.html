@@ -1,5 +1,5 @@
 <div class="rounded-4 w-100 h-100" style="position: relative">
-  <div class="fs-4 fw-bold mb-2">Class Activity</div>
+  <div class="fs-4 fw-bold mb-2">{{"CLASS_ACTIVITY" | translate}}</div>
   <div class="mb-2 d-flex justify-content-between">
     <div class="col-md-5">
       <div class="input-group">
@@ -34,7 +34,6 @@
         data-bs-target="#filterModal"
       >
         <svg
-          xmlns="http://www.w3.org/2000/svg"
           fill="currentColor"
           width="24px"
           height="24px"
@@ -42,12 +41,12 @@
           version="1.1"
           class="bi bi-funnel-fill me-2"
         >
-          <title>filter</title>
+          <title>{{"FILTER" | translate}}</title>
           <path
             d="M8.48 25.72c-0.16 0-0.32-0.040-0.44-0.12-0.24-0.16-0.4-0.44-0.4-0.72v-8.72l-7.48-8.48c-0.2-0.24-0.28-0.6-0.12-0.88s0.44-0.48 0.76-0.48h19.8c0.32 0 0.64 0.2 0.76 0.48 0.12 0.32 0.080 0.64-0.12 0.92l-7.8 8.8v6.32c0 0.32-0.2 0.6-0.48 0.76l-4.080 2c-0.080 0.080-0.24 0.12-0.4 0.12zM2.64 7.96l6.48 7.32c0.12 0.16 0.2 0.36 0.2 0.56v7.64l2.4-1.2v-6.080c0-0.2 0.080-0.4 0.2-0.56l6.8-7.68c0.040 0-16.080 0-16.080 0z"
           />
         </svg>
-        Filter
+        {{"FILTER" | translate}}
       </button>
       
     </div>
@@ -57,11 +56,11 @@
       <table class="table table-hover table-borderless align-middle">
         <thead class="table-light">
           <tr>
-            <th>Class Name</th>
-            <th>Leader</th>
-            <th>Activity Time</th>
-            <th>Status</th>
-            <th>Action</th>
+            <th>{{"CLASS_NAME" | translate}}</th>
+            <th>{{"LEADER" | translate}}</th>
+            <th>{{"ACTIVITY_TIME" | translate}}</th>
+            <th>{{"STATUS" | translate}}</th>
+            <th>{{"ACTION" | translate}}</th>
           </tr>
         </thead>
         <tbody>
@@ -122,25 +121,7 @@
                 *ngIf="!isActive('/my-class')"
                 (click)="navigateActivityView(item.classId)"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    class="icon icon-tabler icons-tabler-outline icon-tabler-eye-check"
-                  >
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                    <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
-                    <path
-                      d="M11.102 17.957c-3.204 -.307 -5.904 -2.294 -8.102 -5.957c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6a19.5 19.5 0 0 1 -.663 1.032"
-                    />
-                    <path d="M15 19l2 2l4 -4" />
-                  </svg>
+                <img src="assets/icons/eyecheck.svg" alt="eyecheck" />
                 </div>
                 <div
                   class="me-2 cursor-pointer"
@@ -174,7 +155,7 @@
     style="position: absolute; bottom: 0; padding: 10px 10px 0 0"
   >
     <div class="d-flex align-items-center">
-      Total record count: {{ totalRecords }}
+      {{"TOTAL_RECORD_COUNT" | translate}}: {{ totalRecords }}
     </div>
     <p-paginator
       (onPageChange)="onPageChange($event)"
@@ -197,7 +178,7 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="filterModalLabel">Select Filter</h5>
+        <h5 class="modal-title" id="filterModalLabel">{{"SELECT_FILTER" | translate}}</h5>
         <button
           type="button"
           class="btn-close"
@@ -206,40 +187,40 @@
         ></button>
       </div>
       <div class="modal-body">
-        <label for="department" class="form-label mb-0">Department</label>
+        <label for="department" class="form-label mb-0">{{"DEPARTMENT" | translate}}</label>
         <div class="mb-3">
           <p-autoComplete
             [(ngModel)]="selectedDepartment"
             [dropdown]="true"
             [suggestions]="filteredDepartments"
             placeholder="Select Department"
-            (completeMethod)="filterDepartment($event)"
+            (completeMethod)="filterGeneric($event, 'departments', 'filteredDepartments')"
             optionLabel="name"
           />
         </div>
-        <label for="course" class="form-label mb-0">Batch</label>
+        <label for="course" class="form-label mb-0">{{"BATCH" | translate}}</label>
         <div class="mb-3">
           <p-autoComplete
             [(ngModel)]="selectedCourse"
             [dropdown]="true"
             placeholder="Select Batch"
             [suggestions]="filteredCourses"
-            (completeMethod)="filterCourse($event)"
+            (completeMethod)="filterGeneric($event, 'courses', 'filteredCourses')"
             optionLabel="name"
           />
         </div>
-        <label for="classes" class="form-label mb-0">Class</label>
+        <label for="classes" class="form-label mb-0">{{"CLASS" | translate}}</label>
         <div class="mb-3">
           <p-autoComplete
             [(ngModel)]="selectedClass"
             [dropdown]="true"
             placeholder="Select Class"
             [suggestions]="filteredClasses"
-            (completeMethod)="filterClass($event)"
+            (completeMethod)="filterGeneric($event, 'classes', 'filteredClasses')"
             optionLabel="name"
           />
         </div>
-        <label for="classes" class="form-label mb-0">Status</label>
+        <label for="classes" class="form-label mb-0">{{"STATUS" | translate}}</label>
         <div class="mb-3">
           <p-multiSelect
             [options]="status"
@@ -250,24 +231,24 @@
             styleClass="w-100 md-w-80"
           />
         </div>
-        <label for="classes" class="form-label mb-0">Activity</label>
+        <label for="classes" class="form-label mb-0">{{"ACTIVITY" | translate}}</label>
         <div class="mb-3">
           <p-autoComplete
             [(ngModel)]="selectedActivity"
             [dropdown]="true"
             placeholder="Select Activity"
             [suggestions]="filteredActivities"
-            (completeMethod)="filterActivity($event)"
+            (completeMethod)="filterGeneric($event, 'activities', 'filteredActivities')"
             optionLabel="name"
           />
         </div>
-        <p class="text-muted">*You can choose multiple filters</p>
+        <p class="text-muted">{{"CAN_CHOOSE_MUITIPLE_FILTER" | translate}}</p>
         <button
           type="button"
           class="btn btn-primary w-100"
           (click)="onSelectedFilter()"
         >
-          Apply Now
+        {{"APPLY_NOW" | translate}}
         </button>
       </div>
     </div>

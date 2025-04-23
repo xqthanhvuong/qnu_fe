@@ -5,12 +5,14 @@ import { Observable } from 'rxjs';
 import { JsonResponse } from '../dto/response/json-response';
 import { PagedResponse } from '../dto/response/paged-response';
 import { CourseResponse } from '../dto/response/course-response';
+import { enviroment } from '../../environments/environment';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class CourseService {
-  private baseUrl = 'http://localhost:8000/AMQNU/api/courses';
+  private baseUrl = enviroment.apiURL + 'courses';
   private courseRequest: CourseRequest | null = null;
 
   constructor(private http: HttpClient) { }

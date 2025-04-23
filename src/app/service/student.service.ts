@@ -5,12 +5,14 @@ import { JsonResponse } from '../dto/response/json-response';
 import { PagedResponse } from '../dto/response/paged-response';
 import { StudentResponse } from '../dto/response/student-response';
 import { StudentRequest } from '../dto/request/student-request';
+import { enviroment } from '../../environments/environment';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class StudentService {
-  private baseUrl = 'http://localhost:8000/AMQNU/api/students';
+  private baseUrl = enviroment.apiURL + 'students';
 
   constructor(private http: HttpClient) { }
   

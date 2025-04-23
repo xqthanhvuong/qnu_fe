@@ -5,13 +5,15 @@ import { JsonResponse } from '../dto/response/json-response';
 import { Observable } from 'rxjs';
 import { PagedResponse } from '../dto/response/paged-response';
 import { AdvisorRequest } from '../dto/request/advisor-tequest';
+import { enviroment } from '../../environments/environment';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class AdvisorService {
 
-  private baseUrl = 'http://localhost:8000/AMQNU/api/academic-advisors';
+  private baseUrl = enviroment.apiURL + 'academic-advisors';
 
   constructor(private http: HttpClient) {}
 
@@ -46,5 +48,13 @@ export class AdvisorService {
   getAcademicYears(): Observable<JsonResponse<string[]>> {
     return this.http.get<JsonResponse<string[]>>(`${this.baseUrl}/academic-years`);
   }
+
+  uploadCSV(file: File): Observable<JsonResponse<string>> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post<JsonResponse<string>>(`${this.baseUrl}/upload`, formData);
+  }
+
+
 
 }

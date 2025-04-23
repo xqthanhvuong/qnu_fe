@@ -4,6 +4,8 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { map, tap } from 'rxjs/operators';
 import { DOCUMENT } from '@angular/common';
+import { enviroment } from '../../environments/environment';
+
 
 @Injectable({
   providedIn: 'root'
@@ -30,7 +32,7 @@ export class AuthService {
   }
 
   login(username: string, password: string): Observable<any> {
-    return this.http.post<any>('http://localhost:8000/AMQNU/api/auth/log-in', { username, password }).pipe(
+    return this.http.post<any>(enviroment.apiURL + 'auth/log-in', { username, password }).pipe(
       tap((response) => {
         if (response.result.token) {
           this.setCookie(this.tokenKey, response.result.token, 1); 
