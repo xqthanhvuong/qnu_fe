@@ -60,7 +60,7 @@ export class WebSocketService {
       this.isConnected = true;
       this.reconnectAttempts = 0;
       console.log('WebSocket connected');
-      this.toastr.success('WebSocket connected', 'Connected');
+      // this.toastr.success('WebSocket connected', 'Connected');
     };
 
     this.socket.onmessage = (event) => {

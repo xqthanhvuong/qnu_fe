@@ -1,0 +1,30 @@
+.circle-timer-wrapper {
+    position: relative;
+    width: 40px;
+    height: 40px;
+  }
+  .circle-timer {
+    transform: rotate(-90deg);
+    width: 100%;
+    height: 100%;
+  }
+  .bg {
+    fill: none;
+    stroke: #eee;
+    stroke-width: 8;
+  }
+  .progress {
+    fill: none;
+    stroke: #78c000;
+    stroke-width: 8;
+    transition: stroke-dashoffset 0.1s linear;
+  }
+  .time-display {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 14px;
+    font-weight: bold;
+  }
+  

@@ -25,13 +25,13 @@ export class LecturerListComponent extends BaseFilterComponent implements OnInit
   private modalInstance: any;
   selectedFile: File | null = null;
   itemIdToDelete: number | null = null;
-  @ViewChild('searchInput', { static: true }) searchInput!: ElementRef;
   @ViewChild('filterModal') filterModal!: ElementRef;
   selectedDepartment: DepartmentResponse | null = null;
   departments: DepartmentResponse[] = [];
   filteredDepartments: DepartmentResponse[] = [];
   selectedDepartmentId: number | null = null;
   fileName: string = '';
+  searchInputValue: string = '';
 
   constructor(
     private lecturerService: LecturerService,
@@ -45,7 +45,6 @@ export class LecturerListComponent extends BaseFilterComponent implements OnInit
 
   ngOnInit(): void {
     this.loadLecturers({ page: 0, rows: this.rows });
-    this.initializeSearch();
     this.loadFilters();
   }
 
@@ -54,7 +53,7 @@ export class LecturerListComponent extends BaseFilterComponent implements OnInit
       .searchLecturers({
         page: event.page,
         size: event.rows,
-        filter: { keyWord: this.searchInput.nativeElement.value,
+        filter: { keyWord: this.searchInputValue,
           departmentId: this.selectedDepartmentId
          },
       })
@@ -66,13 +65,6 @@ export class LecturerListComponent extends BaseFilterComponent implements OnInit
       });
   }
 
-  initializeSearch(): void {
-    fromEvent(this.searchInput.nativeElement, 'input')
-      .pipe(debounceTime(500))
-      .subscribe(() => {
-        this.loadLecturers({ page: 0, rows: this.rows });
-      });
-  }
 
   navigateAddLecturer(){
     this.router.navigate(['/lecturer/add']);
@@ -113,14 +105,6 @@ export class LecturerListComponent extends BaseFilterComponent implements OnInit
     }
   }
 
-  deleteLecturer(lecturerId: number): void {
-    this.lecturerService.deleteLecturer(lecturerId).subscribe((response) => {
-      if (response.code === 200) {
-        this.loadLecturers({ page: this.page, rows: this.rows });
-      }
-    });
-  }
-
   loadFilters(): void {
     this.departmentService.getDepartmentSummary().subscribe((response) => {
       if (response.code === 200) {
@@ -130,78 +114,17 @@ export class LecturerListComponent extends BaseFilterComponent implements OnInit
   }
 
 
-  downloadCSVTemplate() {
-    const link = document.createElement('a');
-    link.href = 'http://localhost:8000/AMQNU/api/lectureres/download-template'; // API tải file mẫu
-    link.download = 'lecturer_template.csv';
-    link.click();
+
+
+  onKeywordChange(keyword: string) {
+    this.searchInputValue = keyword;         
+    this.loadLecturers({ page: 0, rows: this.rows });
   }
 
-  onDragOver(event: DragEvent) {
-    event.preventDefault();
-    event.stopPropagation();
-    const dropArea = event.target as HTMLElement;
-    dropArea.classList.add('drag-over');
-  }
+  deleteLecturer = (id: number) =>
+    this.lecturerService.deleteLecturer(id);
 
-  // Xử lý khi thả file vào khu vực
-  onDrop(event: DragEvent) {
-    event.preventDefault();
-    event.stopPropagation();
-    const dropArea = event.target as HTMLElement;
-    dropArea.classList.remove('drag-over');
-
-    const file = event.dataTransfer?.files[0];
-
-    if (
-      file &&
-      file.type ===
-        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    ) {
-      this.selectedFile = file;
-      this.fileName = file.name;
-    } else {
-      this.toastr.error('Please select a valid Excel file.', 'Invalid File');
-      this.selectedFile = null;
-    }
-  }
-
-  onFileSelected(event: any) {
-    const file = event.target.files[0];
-    if (
-      file &&
-      file.type ===
-        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    ) {
-      this.selectedFile = file;
-      this.fileName = file.name;
-    } else {
-      this.toastr.error('Please select a valid Excel file.', 'Invalid File');
-      this.selectedFile = null;
-    }
-  }
-
-
-  uploadCSVFile() {
-    if (this.selectedFile) {
-      this.lecturerService.uploadCSV(this.selectedFile).subscribe(
-        (response) => {
-          if (response.code === 200) {
-            this.toastr.success('File uploaded successfully!', 'Success');
-            this.selectedFile = null;
-            return;
-          }
-          console.error('Error uploading File');
-          this.toastr.error('Failed to upload file.', 'Error');
-        },
-        (error) => {
-          console.error('Error uploading CSV:', error);
-          this.toastr.error('Failed to upload file.', 'Error');
-        }
-      );
-    } else {
-      this.toastr.warning('Please select a file to upload.', 'Warning');
-    }
-  }
+  uploadLecturer = (file: File) =>
+    this.lecturerService.uploadCSV(file);
 
 }

@@ -28,7 +28,6 @@ export class StudentListComponent extends BaseFilterComponent implements OnInit 
   page: number = 0;
   private modalInstance: any;
   itemIdToDelete: number | null = null;
-  @ViewChild('searchInput', { static: true }) searchInput!: ElementRef;
   @ViewChild('filterModal') filterModal!: ElementRef;
   selectedDepartment: DepartmentResponse | null = null;
   selectedCourse: CourseResponse | null = null;
@@ -44,6 +43,7 @@ export class StudentListComponent extends BaseFilterComponent implements OnInit 
   selectedClassId: number | null = null;
   selectedFile: File | null = null;
   fileName: string = '';
+  searchInputValue: string = '';
 
 
   constructor(
@@ -59,7 +59,6 @@ export class StudentListComponent extends BaseFilterComponent implements OnInit 
   }
   ngOnInit(): void {
     this.loadStudents({ page: 0, rows: this.rows });
-    this.initializeSearch();
     this.loadFilters();
   }
 
@@ -69,7 +68,7 @@ export class StudentListComponent extends BaseFilterComponent implements OnInit 
       .searchStudent({
         page: event.page,
         size: event.rows,
-        filter: { keyWord: this.searchInput.nativeElement.value,
+        filter: { keyWord: this.searchInputValue,
           courseId: this.selectedCourseId,
           departmentId: this.selectedDepartmentId,
           classId: this.selectedClassId
@@ -83,13 +82,6 @@ export class StudentListComponent extends BaseFilterComponent implements OnInit 
       });
   }
 
-  initializeSearch(): void {
-    fromEvent(this.searchInput.nativeElement, 'input')
-      .pipe(debounceTime(500))
-      .subscribe(() => {
-        this.loadStudents({ page: 0, rows: this.rows });
-      });
-  }
 
   navigateAddStudent(){
     this.router.navigateByUrl('/students/add');
@@ -110,22 +102,6 @@ export class StudentListComponent extends BaseFilterComponent implements OnInit 
     const modalElement = document.getElementById('deleteModal');
     this.modalInstance = new bootstrap.Modal(modalElement!);
     this.modalInstance.show();
-  }
-
-  confirmDelete() {
-    if (this.itemIdToDelete !== null) {
-      this.deleteStudent(this.itemIdToDelete);
-      this.itemIdToDelete = null;
-      this.modalInstance.hide();
-    }
-  }
-
-  deleteStudent(studentId: number): void {
-    this.studentService.deleteStudent(studentId).subscribe((response) => {
-      if (response.code === 200) {
-        this.loadStudents({ page: this.page, rows: this.rows });
-      }
-    });
   }
 
 
@@ -163,78 +139,16 @@ export class StudentListComponent extends BaseFilterComponent implements OnInit 
     });
   }
 
-  downloadCSVTemplate() {
-    const link = document.createElement('a');
-    link.href = 'http://localhost:8000/AMQNU/api/students/download-template'; // API tải file mẫu
-    link.download = 'students_template.csv';
-    link.click();
-  }
 
   
-  uploadCSVFile() {
-    if (this.selectedFile) {
-      this.studentService.uploadCSV(this.selectedFile).subscribe(
-        (response) => {
-          if (response.code === 200) {
-            this.toastr.success('CSV file uploaded successfully!', 'Success');
-            this.selectedFile = null;
-            return;
-          }
-          console.error('Error uploading CSV');
-          this.toastr.error('Failed to upload CSV file.', 'Error');
-        },
-        (error) => {
-          console.error('Error uploading CSV:', error);
-          this.toastr.error('Failed to upload CSV file.', 'Error');
-        }
-      );
-    } else {
-      this.toastr.warning('Please select a CSV file to upload.', 'Warning');
-    }
+  onKeywordChange(keyword: string) {
+    this.searchInputValue = keyword;         
+    this.loadStudents({ page: 0, rows: this.rows });
   }
 
-
-  onDragOver(event: DragEvent) {
-    event.preventDefault();
-    event.stopPropagation();
-    const dropArea = event.target as HTMLElement;
-    dropArea.classList.add('drag-over');
-  }
-
-  // Xử lý khi thả file vào khu vực
-  onDrop(event: DragEvent) {
-    event.preventDefault();
-    event.stopPropagation();
-    const dropArea = event.target as HTMLElement;
-    dropArea.classList.remove('drag-over');
-
-    const file = event.dataTransfer?.files[0];
-
-    if (
-      file &&
-      file.type ===
-        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    ) {
-      this.selectedFile = file;
-      this.fileName = file.name;
-    } else {
-      this.toastr.error('Please select a valid Excel file.', 'Invalid File');
-      this.selectedFile = null;
-    }
-  }
-
-  onFileSelected(event: any) {
-    const file = event.target.files[0];
-    if (
-      file &&
-      file.type ===
-        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    ) {
-      this.selectedFile = file;
-      this.fileName = file.name;
-    } else {
-      this.toastr.error('Please select a valid Excel file.', 'Invalid File');
-      this.selectedFile = null;
-    }
-  }
+  deleteStudent = (id: number) =>
+    this.studentService.deleteStudent(id);
+  
+  uploadStudent = (file: File) =>
+    this.studentService.uploadCSV(file);
 }

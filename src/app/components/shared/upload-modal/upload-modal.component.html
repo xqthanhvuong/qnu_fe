@@ -1,0 +1,46 @@
+<div
+  class="modal fade"
+  [id]="modalId"
+  tabindex="-1"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ title }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body text-center">
+        <button class="btn btn-outline-secondary mb-3"
+                (click)="downloadTemplate()">
+                {{ "DOWNLOAD_SAMPLE_XLSX" | translate }}
+        </button>
+
+        <div class="file-upload-area border rounded p-3"
+             (dragover)="onDragOver($event)"
+             (drop)="onDrop($event)"
+             (click)="fileInput.click()">
+          <input #fileInput type="file" accept=".xlsx" hidden
+                 (change)="onFileSelected($event)" />
+
+          <p class="mt-3 mb-0"> {{"DRAG_DROP_FILE" | translate}}</p>
+
+          <div *ngIf="fileName" class="mt-2">
+            <strong>{{"SELECTED_FILE" | translate}}:</strong> {{ fileName }}
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">
+            {{ "CLOSE" | translate }}
+        </button>
+        <button class="btn btn-primary"
+                (click)="upload()" [disabled]="!selectedFile">
+                {{ "UPLOAD" | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

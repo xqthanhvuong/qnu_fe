@@ -26,6 +26,8 @@ export class AttendanceComponent implements OnInit {
   modalInstance: any;
   statusUpdate: any;
   idAttendance: number | null = null;
+  showCountdown = false;
+  countdownDuration = 0; 
 
   clear(table: Table) {
     table.clear();
@@ -60,6 +62,33 @@ export class AttendanceComponent implements OnInit {
       this.loadAttendance();
     });
   }
+
+  onCodeExpired() {
+    this.showCountdown = false; // ẩn component countdown
+    this.attendanceService.renew(this.classActivityId!).pipe(
+      catchError((error) => {
+        this.toastr.error('Server error or network issue!', 'Error');
+        // this.location.back();
+        return EMPTY;
+      })
+    ).subscribe((response) => {
+      if (response.code === 200) {
+        this.attendanceCode = response.result.attendanceCode;
+      
+        const updatedDate = new Date(response.result.updateAt);
+        const targetTime = updatedDate.getTime() + 30000; // cộng 30000ms
+        const now = Date.now();
+      
+        // Tính số giây còn lại (không âm)
+        this.countdownDuration = Math.max(0, Math.floor((targetTime - now) / 1000));
+        this.showCountdown = true;
+      
+        this.loadAttendance();
+      }
+    });
+
+  }
+  
 
   loadAttendance() {
       if (this.classActivityId !== null) {
@@ -101,10 +130,9 @@ export class AttendanceComponent implements OnInit {
     createAttendanceSession(): void {
       this.attendanceService.createAttendanceSession(this.classActivityId!).pipe(
         catchError((error) => {
-          if(error.error.code === 1046){
+          if(error.error.code === 1046 || error.error.code === 1052){
             this.toastr.error(error.error.message, 'Error');
-          }
-          else{
+          } else{
             this.toastr.error('Server error or network issue!', 'Error');
           }
           // this.location.back();
@@ -112,8 +140,16 @@ export class AttendanceComponent implements OnInit {
         })
       ).subscribe((response) => {
         if (response.code === 200) {
-          this.toastr.success('Attendance session created successfully!', 'Success');
-          this.openAttendanceCodeModal(response.message);
+          this.openAttendanceCodeModal(response.result.attendanceCode);
+        
+          const updatedDate = new Date(response.result.updateAt);
+          const targetTime = updatedDate.getTime() + 30000; // cộng 30000ms
+          const now = Date.now();
+        
+          // Tính số giây còn lại (không âm)
+          this.countdownDuration = Math.max(0, Math.floor((targetTime - now) / 1000));
+          this.showCountdown = true;
+        
           this.loadAttendance();
         }
       });
@@ -121,9 +157,18 @@ export class AttendanceComponent implements OnInit {
 
     openAttendanceCodeModal(code: string): void {
       this.attendanceCode = code;
+      this.showCountdown = false; // reset component con
+    
+      // Delay nhỏ để Angular remove & re-add component
+      setTimeout(() => {
+        this.showCountdown = true;
+      }, 0);
+    
       const modalElement = document.getElementById('attendanceCodeModal');
-      var modalInstance = new bootstrap.Modal(modalElement!);
-      modalInstance.show();
+      if (modalElement) {
+        this.modalInstance = new bootstrap.Modal(modalElement);
+        this.modalInstance.show();
+      }
     }
 
     openAttendanceModal(){

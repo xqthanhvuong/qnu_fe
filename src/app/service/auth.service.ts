@@ -19,6 +19,9 @@ export class AuthService {
 
   private userRole: string = '';
 
+  private role = new BehaviorSubject<string>('');
+  userRole$ = this.role.asObservable();
+
   private tokenKey = 'authToken';
 
   private permissions: string[] = [];
@@ -39,6 +42,7 @@ export class AuthService {
           this.loggedIn.next(true);
           const payload = this.decodeToken(response.result.token);
           this.userName.next(payload?.username || '');
+          this.role.next(payload?.role || '');
           this.userRole = payload?.role || '';
           this.permissions = payload?.permission || [];
         }
@@ -50,6 +54,7 @@ export class AuthService {
     this.deleteCookie(this.tokenKey);
     this.loggedIn.next(false);
     this.userName.next('');
+    this.role.next('');
     this.userRole = '';
     this.permissions = [];
   }
@@ -61,6 +66,7 @@ export class AuthService {
       const payload = this.decodeToken(token);
       this.userName.next(payload?.username || '');
       this.userRole = payload?.role || '';
+      this.role.next(payload?.role || '');
       this.permissions = payload?.permission || [];
     } else {
       this.logout();

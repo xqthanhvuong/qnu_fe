@@ -19,12 +19,12 @@ export class DepartmentListComponent implements OnInit {
   rows: number = 7;
   first: number = 0;
   page: number = 0;
-  @ViewChild('searchInput', { static: true }) searchInput!: ElementRef;
   itemIdToDelete: number | null = null;
   private modalInstance: any;
   selectedDepartment: DepartmentResponse | null = null;
   selectedFile: File | null = null;
   fileName: string = '';
+  searchInputValue: string = ''; 
 
   constructor(
     private departmentService: DepartmentService,
@@ -35,7 +35,6 @@ export class DepartmentListComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadDepartments({ page: 0, rows: this.rows }); // Tải dữ liệu lần đầu
-    this.initializeSearch();
   }
 
   onPageChange(event: any) {
@@ -51,7 +50,7 @@ export class DepartmentListComponent implements OnInit {
       .searchDepartments({
         page: this.page,
         size,
-        filter: { keyWord: this.searchInput.nativeElement.value },
+        filter: {keyWord:this.searchInputValue},
       })
       .subscribe((response) => {
         if (response.code === 200) {
@@ -61,14 +60,13 @@ export class DepartmentListComponent implements OnInit {
       });
   }
 
-  initializeSearch(): void {
-    fromEvent(this.searchInput.nativeElement, 'input')
-      .pipe(debounceTime(500))
-      .subscribe(() => {
-        const searchValue = this.searchInput.nativeElement.value;
-        this.loadDepartments({ page: 0, rows: this.rows });
-      });
-  }
+
+  /* DepartmentListComponent */
+onKeywordChange(keyword: string) {
+  this.searchInputValue = keyword;          // <- nếu cần lưu để export
+  this.loadDepartments({ page: 0, rows: this.rows });
+}
+
 
   openDeleteModal(id: number) {
     this.itemIdToDelete = id;
@@ -77,13 +75,8 @@ export class DepartmentListComponent implements OnInit {
     this.modalInstance.show();
   }
 
-  confirmDelete() {
-    if (this.itemIdToDelete !== null) {
-      this.deleteDepartment(this.itemIdToDelete);
-      this.itemIdToDelete = null;
-      this.modalInstance.hide();
-    }
-  }
+  deleteDepartment = (id: number) =>
+    this.departmentService.deleteDepartment(id);
 
   navigateAddDepartment(): void {
     this.router.navigateByUrl('/department/add');
@@ -97,93 +90,13 @@ export class DepartmentListComponent implements OnInit {
     this.router.navigateByUrl(`/department/edit/${department.id}`);
   }
 
-  deleteDepartment(departmentId: number): void {
-    // Gọi service để xóa phòng ban
-    this.departmentService
-      .deleteDepartment(departmentId)
-      .subscribe((response) => {
-        if (response.code === 200) {
-          this.loadDepartments({ page: this.page, rows: this.rows }); // Tải lại danh sách sau khi xóa thành công
-        }
-      });
-  }
-
   openDepartmentModal(department: DepartmentResponse) {
     this.selectedDepartment = department;
     const modalElement = document.getElementById('departmentModal');
     const modalInstance = new bootstrap.Modal(modalElement);
     modalInstance.show();
   }
-  downloadCSVTemplate() {
-    const link = document.createElement('a');
-    link.href = 'http://localhost:8000/AMQNU/api/departments/download-template'; // API tải file mẫu
-    link.download = 'departments_template.xlsx';
-    link.click();
-  }
 
-  uploadCSVFile() {
-    if (this.selectedFile) {
-      this.departmentService.uploadCSV(this.selectedFile).subscribe(
-        (response) => {
-          if (response.code === 200) {
-            this.toastr.success('File uploaded successfully!', 'Success');
-            this.selectedFile = null;
-            return;
-          }
-          console.error('Error uploading');
-          this.toastr.error('Failed to upload file.', 'Error');
-        },
-        (error) => {
-          console.error('Error uploading:', error);
-          this.toastr.error('Failed to upload file.', 'Error');
-        }
-      );
-    } else {
-      this.toastr.warning('Please select a file to upload.', 'Warning');
-    }
-  }
-
-  onDragOver(event: DragEvent) {
-    event.preventDefault();
-    event.stopPropagation();
-    const dropArea = event.target as HTMLElement;
-    dropArea.classList.add('drag-over');
-  }
-
-  // Xử lý khi thả file vào khu vực
-  onDrop(event: DragEvent) {
-    event.preventDefault();
-    event.stopPropagation();
-    const dropArea = event.target as HTMLElement;
-    dropArea.classList.remove('drag-over');
-
-    const file = event.dataTransfer?.files[0];
-
-    if (
-      file &&
-      file.type ===
-        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    ) {
-      this.selectedFile = file;
-      this.fileName = file.name;
-    } else {
-      this.toastr.error('Please select a valid Excel file.', 'Invalid File');
-      this.selectedFile = null;
-    }
-  }
-
-  onFileSelected(event: any) {
-    const file = event.target.files[0];
-    if (
-      file &&
-      file.type ===
-        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    ) {
-      this.selectedFile = file;
-      this.fileName = file.name;
-    } else {
-      this.toastr.error('Please select a valid Excel file.', 'Invalid File');
-      this.selectedFile = null;
-    }
-  }
+  uploadDepartment = (file: File) =>
+    this.departmentService.uploadCSV(file);
 }

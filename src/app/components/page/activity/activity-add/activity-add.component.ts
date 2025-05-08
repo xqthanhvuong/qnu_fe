@@ -19,6 +19,7 @@ export class ActivityAddComponent implements OnInit {
   totalSize: number = 0;
   totalSizePercent: number = 0;
   idActivity: number | null = null;
+  dayStart: Date | null = null;
   
 
   constructor(

@@ -1,10 +1,11 @@
 <div class="vh-100 vw-100">
   <!-- Header Section -->
   <div
-    class="py-3 px-4 h-10 w-100 d-flex justify-content-between align-items-center bg-body border border-1"
+    class="fixed-top position-md-relative py-2 px-2 px-md-4 w-100 d-flex justify-content-between align-items-center bg-body border border-1"
+    style="height: 56px"
   >
     <!-- Left Section: Title and Icon -->
-    <div class="d-flex align-items-center">
+    <div class="d-md-flex d-none align-items-center">
       <div
         class="custom-icon d-flex align-items-center justify-content-center me-2"
       >
@@ -13,16 +14,27 @@
       <span class="title-text fs-4 fw-bold">Student management support</span>
     </div>
 
+    <div class="h-100 d-md-none">
+      <img src="assets/icons/logo.png" class="h-100 w-100" alt="" />
+    </div>
+
     <!-- Right Section: Notifications, User Info, and Language Toggle (Visible only when logged in) -->
     <div class="d-flex align-items-center">
       <div class="ms-3">
         <div class="dropdown">
           <button
-            class="btn btn-light dropdown-toggle"
+            class="btn btn-light d-md-block d-none dropdown-toggle"
             type="button"
             data-bs-toggle="dropdown"
             aria-expanded="false"
           >
+            <img
+              *ngIf="currentLanguage === 'lao'"
+              src="assets/images/laos.png"
+              alt="lao"
+              class="me-2"
+              style="width: 20px; height: 15px"
+            />
             <img
               *ngIf="currentLanguage === 'en'"
               src="assets/images/en.png"
@@ -38,17 +50,66 @@
               style="width: 20px; height: 15px"
             />
             <img
-            *ngIf="currentLanguage === 'cn'"
-            src="assets/images/cn.png"
-            alt="Vietnamese"
-            class="me-2"
-            style="width: 20px; height: 15px"
-          />
-            {{ currentLanguage === "en" ? "English" : currentLanguage === "vi" ? "Tiếng Việt" : "中文" }}
+              *ngIf="currentLanguage === 'cn'"
+              src="assets/images/cn.png"
+              alt="Vietnamese"
+              class="me-2"
+              style="width: 20px; height: 15px"
+            />
+
+            {{
+              currentLanguage === "en"
+                ? "English"
+                : currentLanguage === "vi"
+                ? "Tiếng Việt"
+                : currentLanguage === "lao"
+                ? "ພາສາລາວ"
+                : "中文"
+            }}
           </button>
+          <button
+            class="btn btn-light d-md-none d-block dropdown-toggle"
+            type="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <img
+              *ngIf="currentLanguage === 'lao'"
+              src="assets/images/laos.png"
+              alt="lao"
+              class="me-2"
+              style="width: 20px; height: 15px"
+            />
+            <img
+              *ngIf="currentLanguage === 'en'"
+              src="assets/images/en.png"
+              alt="English"
+              class="me-2"
+              style="width: 20px; height: 15px"
+            />
+            <img
+              *ngIf="currentLanguage === 'vi'"
+              src="assets/images/vn.png"
+              alt="Vietnamese"
+              class="me-2"
+              style="width: 20px; height: 15px"
+            />
+            <img
+              *ngIf="currentLanguage === 'cn'"
+              src="assets/images/cn.png"
+              alt="Chinese"
+              class="me-2"
+              style="width: 20px; height: 15px"
+            />
+          </button>
+
           <ul class="dropdown-menu">
             <li>
-              <a class="dropdown-item" href="#" (click)="switchLanguage('en'); $event.preventDefault()">
+              <a
+                class="dropdown-item"
+                href="#"
+                (click)="switchLanguage('en'); $event.preventDefault()"
+              >
                 <img
                   src="assets/images/en.png"
                   alt="English"
@@ -59,7 +120,11 @@
               </a>
             </li>
             <li>
-              <a class="dropdown-item" href="#" (click)="switchLanguage('vi'); $event.preventDefault()">
+              <a
+                class="dropdown-item"
+                href="#"
+                (click)="switchLanguage('vi'); $event.preventDefault()"
+              >
                 <img
                   src="assets/images/vn.png"
                   alt="Vietnamese"
@@ -70,7 +135,11 @@
               </a>
             </li>
             <li>
-              <a class="dropdown-item" href="#" (click)="switchLanguage('cn'); $event.preventDefault()">
+              <a
+                class="dropdown-item"
+                href="#"
+                (click)="switchLanguage('cn'); $event.preventDefault()"
+              >
                 <img
                   src="assets/images/cn.png"
                   alt="Chinese"
@@ -79,24 +148,62 @@
                 />
                 中文
               </a>
+            </li>
+            <li>
+              <a
+                class="dropdown-item"
+                href="#"
+                (click)="switchLanguage('lao'); $event.preventDefault()"
+              >
+                <img
+                  src="assets/images/laos.png"
+                  alt="Lao"
+                  class="me-2"
+                  style="width: 20px; height: 15px"
+                />
+                ພາສາລາວ
+              </a>
+            </li>
           </ul>
         </div>
       </div>
-      <div class="ms-4 d-flex align-items-center" *ngIf="isLoggedIn">
+      <div
+        class="ms-4 me-md-0 me-2 d-flex align-items-center"
+        *ngIf="isLoggedIn"
+      >
+        <!-- User Info -->
+        <div class="d-md-block d-none me-2">
+          <div class="text-dark lh-1 text-start fs-5 fw-bold">
+            {{ username }}
+          </div>
+          <div class="text-muted text-start lh-1 text-lowercase fs-6">
+            {{ role }}
+          </div>
+        </div>
+
         <!-- Notification Icon -->
-        <div class="me-4 notification-icon" (click)="toggleNotification()">
+        <div
+          class="me-md-2 me-0 d-flex justify-content-center align-items-center notification-icon"
+          (click)="toggleNotification()"
+          style="
+            border-radius: 50%;
+            background-color: #d6d9dd;
+            height: 40px;
+            width: 40px;
+          "
+        >
           <i
             *ngIf="notiCount > 0"
-            class="pi pi-bell"
-            style="font-size: 24px"
+            class="bi bi-bell-fill"
+            style="font-size: 17px; color: #1a1a1a"
             pTooltip="Notifications"
             pBadge
             [value]="notiCount"
           ></i>
           <i
             *ngIf="notiCount == 0"
-            class="pi pi-bell"
-            style="font-size: 24px"
+            class="bi bi-bell-fill"
+            style="font-size: 17px; color: #1a1a1a"
             pTooltip="Notifications"
           ></i>
           <div class="notification-popup" [class.active]="isPopupVisible">
@@ -123,25 +230,21 @@
           </div>
         </div>
 
-        <!-- User Info -->
-        <div>
-          <div class="text-dark lh-1 text-start fs-5 fw-bold">
-            {{ username }}
-          </div>
-          <div class="text-muted text-start lh-1 text-lowercase fs-6">
-            {{ role }}
-          </div>
-        </div>
-
         <!-- Dropdown Menu -->
-        <div class="dropdown">
+        <div class="dropdown ms-1">
           <button
-            class="circle-dropdown"
+            class="circle-dropdown ms-0"
+            style="
+              height: 40px;
+              width: 40px;
+              border: none;
+              background-color: #d6d9dd;
+            "
             type="button"
             data-bs-toggle="dropdown"
             aria-expanded="false"
           >
-            <i class="bi bi-chevron-down fs-6"></i>
+            <i class="bi bi-three-dots fs-5" style="color: #1a1a1a"></i>
           </button>
           <ul class="dropdown-menu">
             <li>
@@ -156,7 +259,7 @@
   </div>
 
   <!-- Main Content Section -->
-  <section class="h-90 vw-100">
+  <section class="h-md-90 vw-100 pe-md-3 mt-sm-10">
     <router-outlet></router-outlet>
   </section>
 </div>

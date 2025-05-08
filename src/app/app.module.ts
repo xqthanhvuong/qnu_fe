@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
-
+import { NgCircleProgressModule } from 'ng-circle-progress';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/auth/login/login.component';
@@ -70,6 +70,10 @@ import { RelativeTimePipe } from './relative-time.pipe';
 import { ChangePasswordComponent } from './components/auth/change-password/change-password.component';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { UploadModalComponent } from './components/shared/upload-modal/upload-modal.component';
+import { ConfirmDeleteModalComponent } from './components/shared/confirm-delete-modal/confirm-delete-modal.component';
+import { SearchInputComponent } from './components/shared/search-input/search-input.component';
+import { CountdownCircleComponent } from './components/shared/countdown-circle/countdown-circle.component';
 
 
 export function HttpLoaderFactory(http: HttpClient) {
@@ -113,7 +117,11 @@ export function HttpLoaderFactory(http: HttpClient) {
     ActivityMinutesComponent,
     NotificationComponent,
     RelativeTimePipe,
-    ChangePasswordComponent
+    ChangePasswordComponent,
+    UploadModalComponent,
+    ConfirmDeleteModalComponent,
+    SearchInputComponent,
+    CountdownCircleComponent
   ],
   imports: [
     BrowserModule,
@@ -138,6 +146,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     TagModule,
     TooltipModule,
     CommonModule,
+    NgCircleProgressModule.forRoot({}),
     IconFieldModule,
     PaginatorModule,
     TableModule,
@@ -168,6 +177,11 @@ export function HttpLoaderFactory(http: HttpClient) {
       multi: true
     },
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  exports: [
+    UploadModalComponent,
+    ConfirmDeleteModalComponent,
+    SearchInputComponent
+  ]
 })
 export class AppModule { }

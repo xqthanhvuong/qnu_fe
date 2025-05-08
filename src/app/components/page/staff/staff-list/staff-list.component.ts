@@ -22,7 +22,6 @@ export class StaffListComponent extends BaseFilterComponent implements OnInit {
   rows: number = 7;
   first: number = 0;
   page: number = 0;
-  @ViewChild('searchInput', { static: true }) searchInput!: ElementRef;
   @ViewChild('filterModal') filterModal!: ElementRef;
   selectedFile: File | null = null;
   selectedDepartment: DepartmentResponse | null = null;
@@ -32,6 +31,7 @@ export class StaffListComponent extends BaseFilterComponent implements OnInit {
   itemIdToDelete: number | null = null;
   private modalInstance: any;
   fileName: string = '';
+  searchInputValue: string = '';
 
 
   constructor(
@@ -46,7 +46,6 @@ export class StaffListComponent extends BaseFilterComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadStaffs({ page: 0, rows: this.rows });
-    this.initializeSearch();
     this.loadFilters();
   }
 
@@ -58,7 +57,7 @@ export class StaffListComponent extends BaseFilterComponent implements OnInit {
         page: this.page,
         size,
         filter: {
-          keyWord: this.searchInput.nativeElement.value,
+          keyWord: this.searchInputValue,
           departmentId: this.selectedDepartmentId
         },
       })
@@ -70,15 +69,6 @@ export class StaffListComponent extends BaseFilterComponent implements OnInit {
       });
   }
 
-
-  initializeSearch(): void {
-    fromEvent(this.searchInput.nativeElement, 'input')
-      .pipe(debounceTime(500))
-      .subscribe(() => {
-        const searchValue = this.searchInput.nativeElement.value;
-        this.loadStaffs({ page: 0, rows: this.rows });
-      });
-  }
 
   openDeleteModal(id: number) {
     this.itemIdToDelete = id;
@@ -136,78 +126,14 @@ export class StaffListComponent extends BaseFilterComponent implements OnInit {
     });
   }
 
-
-  downloadCSVTemplate() {
-    const link = document.createElement('a');
-    link.href = 'http://localhost:8000/AMQNU/api/staffs/download-template'; // API tải file mẫu
-    link.download = 'staffs_template.csv';
-    link.click();
+  onKeywordChange(keyword: string) {
+    this.searchInputValue = keyword;         
+    this.loadStaffs({ page: 0, rows: this.rows });
   }
 
-  onDragOver(event: DragEvent) {
-    event.preventDefault();
-    event.stopPropagation();
-    const dropArea = event.target as HTMLElement;
-    dropArea.classList.add('drag-over');
-  }
-
-  // Xử lý khi thả file vào khu vực
-  onDrop(event: DragEvent) {
-    event.preventDefault();
-    event.stopPropagation();
-    const dropArea = event.target as HTMLElement;
-    dropArea.classList.remove('drag-over');
-
-    const file = event.dataTransfer?.files[0];
-
-    if (
-      file &&
-      file.type ===
-        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    ) {
-      this.selectedFile = file;
-      this.fileName = file.name;
-    } else {
-      this.toastr.error('Please select a valid Excel file.', 'Invalid File');
-      this.selectedFile = null;
-    }
-  }
-
-  onFileSelected(event: any) {
-    const file = event.target.files[0];
-    if (
-      file &&
-      file.type ===
-        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    ) {
-      this.selectedFile = file;
-      this.fileName = file.name;
-    } else {
-      this.toastr.error('Please select a valid Excel file.', 'Invalid File');
-      this.selectedFile = null;
-    }
-  }
-
-
-  uploadCSVFile() {
-    if (this.selectedFile) {
-      this.staffService.uploadCSV(this.selectedFile).subscribe(
-        (response) => {
-          if (response.code === 200) {
-            this.toastr.success('CSV file uploaded successfully!', 'Success');
-            this.selectedFile = null;
-            return;
-          }
-          console.error('Error uploading CSV');
-          this.toastr.error('Failed to upload CSV file.', 'Error');
-        },
-        (error) => {
-          console.error('Error uploading CSV:', error);
-          this.toastr.error('Failed to upload CSV file.', 'Error');
-        }
-      );
-    } else {
-      this.toastr.warning('Please select a CSV file to upload.', 'Warning');
-    }
-  }
+  deleteStaff = (id: number) =>
+    this.staffService.deleteStaff(id);
+  
+  uploadStaff = (file: File) =>
+    this.staffService.uploadCSV(file);
 }

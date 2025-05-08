@@ -24,7 +24,6 @@ export class ClassListComponent extends BaseFilterComponent implements OnInit {
   rows: number = 7;
   first: number = 0;
   page: number = 0;
-  @ViewChild('searchInput', { static: true }) searchInput!: ElementRef;
   @ViewChild('filterModal') filterModal!: ElementRef;
   itemIdToDelete: number | null = null;
   private modalInstance: any;
@@ -41,6 +40,7 @@ export class ClassListComponent extends BaseFilterComponent implements OnInit {
   selectedCourseId: number | null = null;
   selectedDepartmentId: number | null = null;
   role: string = '';
+  searchInputValue: string = '';
   
   isMyClass: boolean = false;
 
@@ -66,7 +66,6 @@ export class ClassListComponent extends BaseFilterComponent implements OnInit {
     else{
       this.role = this.authService.getRole();
       this.loadClasses({ page: 0, rows: this.rows });
-      this.initializeSearch();
       this.loadFilters();
     }
   }
@@ -109,7 +108,7 @@ export class ClassListComponent extends BaseFilterComponent implements OnInit {
         page: this.page,
         size,
         filter: {
-          keyWord: this.searchInput.nativeElement.value,
+          keyWord: this.searchInputValue,
           courseId: this.selectedCourseId,
           departmentId: this.selectedDepartmentId,
         },
@@ -135,14 +134,6 @@ export class ClassListComponent extends BaseFilterComponent implements OnInit {
     });
   }
 
-  initializeSearch(): void {
-    fromEvent(this.searchInput.nativeElement, 'input')
-      .pipe(debounceTime(500))
-      .subscribe(() => {
-        const searchValue = this.searchInput.nativeElement.value;
-        this.loadClasses({ page: 0, rows: this.rows });
-      });
-  }
   onPageChange(event: any) {
     this.first = event.first;
     this.rows = event.rows;
@@ -163,15 +154,6 @@ export class ClassListComponent extends BaseFilterComponent implements OnInit {
       this.modalInstance.hide();
     }
   }
-
-  deleteClass(classId: number): void {
-    this.classService.deleteClass(classId).subscribe((response) => {
-      if (response.code === 200) {
-        this.loadClasses({ page: this.page, rows: this.rows });
-      }
-    });
-  }
-  
 
   editClass(clazz: ClassResponse) {
     this.classService.setClassRequest({
@@ -201,42 +183,14 @@ export class ClassListComponent extends BaseFilterComponent implements OnInit {
   }
 
 
-  downloadCSVTemplate() {
-    const link = document.createElement('a');
-    link.href = 'http://localhost:8000/AMQNU/api/classes/download-template'; // API tải file mẫu
-    link.download = 'classes_template.csv';
-    link.click();
+  onKeywordChange(keyword: string) {
+    this.searchInputValue = keyword;         
+    this.loadClasses({ page: 0, rows: this.rows });
   }
-  onFileSelected(event: any) {
-    const file = event.target.files[0];
-    if (file && file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
-      this.selectedFile = file;
-    } else {
-      this.toastr.error('Please select a valid Excel file.', 'Invalid File');
-      this.selectedFile = null;
-    }
-}
 
+  deleteClass = (id: number) =>
+    this.classService.deleteClass(id);
 
-  uploadCSVFile() {
-    if (this.selectedFile) {
-      this.classService.uploadCSV(this.selectedFile).subscribe(
-        (response) => {
-          if (response.code === 200) {
-            this.toastr.success('CSV file uploaded successfully!', 'Success');
-            this.selectedFile = null;
-            return;
-          }
-          console.error('Error uploading CSV');
-          this.toastr.error('Failed to upload CSV file.', 'Error');
-        },
-        (error) => {
-          console.error('Error uploading CSV:', error);
-          this.toastr.error('Failed to upload CSV file.', 'Error');
-        }
-      );
-    } else {
-      this.toastr.warning('Please select a CSV file to upload.', 'Warning');
-    }
-  }
+  uploadClass = (file: File) =>
+    this.classService.uploadCSV(file);
 }

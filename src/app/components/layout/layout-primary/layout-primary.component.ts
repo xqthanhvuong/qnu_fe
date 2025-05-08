@@ -44,6 +44,7 @@ export class LayoutPrimaryComponent implements OnInit, OnDestroy {
     private translate: TranslateService,
     private languageService: LanguageService
   ) {
+    
     this.isBrowser = isPlatformBrowser(this.platformId);
   }
 
@@ -79,7 +80,9 @@ export class LayoutPrimaryComponent implements OnInit, OnDestroy {
     this.authService.userName$.subscribe((name) => {
       this.username = name;
     });
-    this.role = this.authService.getRole();
+    this.authService.userRole$.subscribe((role) => {
+      this.role = role;
+    });
     if (this.isBrowser) {
       document.addEventListener('click', this.closePopupOutside.bind(this));
     }

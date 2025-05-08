@@ -9,6 +9,7 @@ import { AuthService } from '../../../service/auth.service';
 })
 export class LayoutSidebarComponent implements OnInit {
   username: string = '';
+  isSidebarVisible = true;
   constructor(private router: Router,public authService: AuthService) {}
 
   ngOnInit(): void {

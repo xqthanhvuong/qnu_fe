@@ -1,14 +1,45 @@
-<div class="h-100 d-flex w-100">
-  <div class="w-20 h-100">
+<!-- <button
+class="sidebar-toggle-btn fixed-top" style="top: 50%; left: 0%; width: 10%;"
+*ngIf="!isSidebarVisible"
+(click)="isSidebarVisible = true"
+>
+➤
+</button> -->
+<div class="arrow fixed-top sidebar-toggle-btn" style="top: 50%; left: -5%; width: 10%;"
+*ngIf="!isSidebarVisible"
+(click)="isSidebarVisible = true"
+>
+  <span></span>
+  <span></span>
+  <span></span>
+</div>
+
+
+<div class="h-100 d-flex w-100 ">
+  <div class="w-20 h-100 fixed-top sidebar-animated me-4 position-md-relative" style="top: 56px !important; overflow: hidden;" [ngStyle]="{ width: isSidebarVisible ? '240px' : '0px' }">
+
     <div
-      class="d-flex h-100 flex-column flex-shrink-0 p-3 bg-body border border-1"
+      class="d-flex h-100 flex-column flex-shrink-0 p-1 p-md-3 bg-body border border-1"
       style="width: 240px"
     >
+    
+    <div class="d-flex justify-content-between">
+      <div class="d-block">
+        Menu
+      </div>
+      <button
+      class=" hover-effect sidebar-close-btn mb-2"
+      (click)="isSidebarVisible = false"
+    >
+      ✖
+    </button>
+    </div>
+
       <ul
         class="nav h-90 nav-pills flex-column flex-nowrap scrollable mb-auto"
         style="overflow-y: scroll"
       >
-        <li class="nav-item" 
+        <li class="nav-item hover-effect" 
         *ngIf="isAdminRole() && authService.checkPermissions('VIEW_DEPARTMENT')"
         >
           <a
@@ -25,7 +56,7 @@
             {{'DEPARTMENT' | translate}}
           </a>
         </li>
-        <li class="nav-item"
+        <li class="nav-item hover-effect"
         *ngIf="isAdminRole() && authService.checkPermissions('VIEW_COURSE')"
         >
           <a
@@ -41,7 +72,7 @@
             {{'BATCH' | translate}}
           </a>
         </li>
-        <li class="nav-item"
+        <li class="nav-item hover-effect"
         *ngIf="!isRoleStudent() && authService.checkPermissions('VIEW_LECTURER')"
         >
           <a
@@ -57,7 +88,7 @@
             {{'LECTURER' | translate}}
           </a>
         </li>
-        <li class="nav-item"
+        <li class="nav-item hover-effect"
         *ngIf="!isRoleStudent() && authService.checkPermissions('VIEW_STAFF')"
         >
           <a
@@ -73,7 +104,7 @@
             {{'STAFF' | translate}}
           </a>
         </li>
-        <li class="nav-item"
+        <li class="nav-item hover-effect"
         *ngIf="!isRoleStudent() && authService.checkPermissions('VIEW_CLASS')"
         >
           <a
@@ -89,7 +120,7 @@
             {{'CLASS' | translate}}
           </a>
         </li>
-        <li class="nav-item"
+        <li class="nav-item hover-effect"
         *ngIf="!isRoleStudent() && authService.checkPermissions('VIEW_STUDENT')"
         >
           <a
@@ -105,7 +136,7 @@
             {{'STUDENT' | translate}}
           </a>
         </li>
-        <li class="nav-item"
+        <li class="nav-item hover-effect"
         *ngIf="isRoleStudent() || authService.checkPermissions('VIEW_ADVISOR')"
         >
           <a
@@ -121,7 +152,7 @@
             {{'ADVISOR' | translate}}
           </a>
         </li>
-        <li class="nav-item" *ngIf="authService.checkPermissions('VIEW_ROLE')">
+        <li class="nav-item hover-effect" *ngIf="authService.checkPermissions('VIEW_ROLE')">
           <a
             (click)="navigate('/role')"
             class="nav-link"
@@ -135,7 +166,7 @@
             {{ 'ROLE' | translate }}
           </a>
         </li>
-        <li class="nav-item" *ngIf="!isAdminRole() && !isRoleStudent()">
+        <li class="nav-item hover-effect" *ngIf="!isAdminRole() && !isRoleStudent()">
           <a
             (click)="navigate('/my-class')"
             class="nav-link"
@@ -149,7 +180,7 @@
             {{ 'MY_CLASS' | translate}}
           </a>
         </li>
-        <li class="nav-item" *ngIf="isRoleStudent()">
+        <li class="nav-item hover-effect" *ngIf="isRoleStudent()">
           <a
             (click)="navigate('/my-class/student')"
             class="nav-link"
@@ -163,7 +194,7 @@
             {{ 'MY_CLASS' | translate}}
           </a>
         </li>
-        <li class="nav-item"
+        <li class="nav-item hover-effect"
         *ngIf="!isRoleStudent() && authService.checkPermissions('VIEW_ACTIVITY')"
         >
           <a
@@ -214,7 +245,7 @@
       </div>
     </div>
   </div>
-  <div class="w-80 h-100">
+  <div class=" h-100" style="max-width: 100%; flex:1">
     <router-outlet></router-outlet>
   </div>
 </div>

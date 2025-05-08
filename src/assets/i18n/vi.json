@@ -126,7 +126,12 @@
     "ADD_NEW_STAFF": "Thêm cán bộ mới",
     "EDIT_STAFF": "Chỉnh sửa cán bộ",
     "ADD_NEW_STUDENT": "Thêm sinh viên mới",
-    "EDIT_STIDENT": "Chỉnh sửa sinh viên"
+    "EDIT_STIDENT": "Chỉnh sửa sinh viên",
+    "SEARCH": "Tìm kiếm",
+    "TITLE_HOME_NAME": "Hệ thống Quản lý Sinh hoạt Lớp",
+    "HOME_1": "Trong bối cảnh đào tạo theo tín chỉ ngày càng phổ biến tại các trường đại học, việc quản lý sinh hoạt lớp bằng phương pháp truyền thống đang gặp nhiều thách thức, đặc biệt về hiệu suất và độ chính xác. Với mục tiêu hiện đại hóa quy trình, \"Hệ thống Quản lý Sinh hoạt Lớp\" ra đời nhằm tối ưu hóa các hoạt động như điểm danh, thông báo, quản lý tài liệu và báo cáo tự động.",
+    "HOME_2": "Được thiết kế đặc biệt cho Khoa Công nghệ Thông tin - Đại học Quy Nhơn, hệ thống đơn giản hóa quy trình tổ chức các hoạt động lớp học, từ phân công cố vấn học tập, quản lý thông báo, đến theo dõi và đánh giá hiệu quả sinh hoạt lớp. Hệ thống không chỉ nâng cao hiệu suất quản lý mà còn mang lại sự thuận tiện cho sinh viên và giảng viên trong các hoạt động tập thể.",
+    "HOME_3": "Với giao diện thân thiện và hiện đại, hệ thống mang đến trải nghiệm quản lý liền mạch, góp phần nâng cao tính minh bạch và độ chính xác trong tổ chức các hoạt động lớp học tại các trường đại học."
 
   }
   

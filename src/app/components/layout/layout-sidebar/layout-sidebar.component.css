@@ -1,0 +1,131 @@
+/* Sidebar */
+#sidebar {
+  transition: transform 0.3s ease;
+  width: 240px; /* Sidebar fixed width */
+  overflow-y: auto; /* Ensure sidebar content can scroll if needed */
+}
+
+/* Sidebar hidden on mobile */
+#sidebar.hidden {
+  transform: translateX(-100%);
+}
+
+/* Content area adjustments */
+.content-area {
+  transition: margin-left 0.3s ease;
+}
+
+#sidebar:not(.hidden) + .content-area {
+  margin-left: 240px;
+}
+
+/* Sidebar always visible on medium and large screens */
+@media (min-width: 768px) {
+  #sidebar {
+    transform: translateX(0);
+  }
+
+  .content-area {
+    margin-left: 240px;
+  }
+}
+
+/* Mobile version: Sidebar hidden by default, can be toggled */
+@media (max-width: 767px) {
+  #sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    height: 100vh;
+    z-index: 1040;
+  }
+
+  .content-area {
+    margin-left: 0;
+  }
+
+  #sidebar:not(.hidden) + .content-area {
+    padding-left: 240px;
+  }
+}
+
+/* Improve form inputs and buttons */
+.input-group {
+  margin-bottom: 20px;
+}
+
+.btn {
+  margin-right: 10px;
+}
+
+.btn-primary {
+  width: auto;
+  padding: 8px 20px;
+}
+
+.table {
+  width: 100%;
+  margin-top: 20px;
+  border-collapse: collapse;
+}
+
+.table th, .table td {
+  padding: 10px;
+  text-align: center;
+}
+
+.table thead {
+  background-color: #f8f9fa;
+}
+
+.table-hover tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Pagination styling */
+.pagination-container {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  align-items: center;
+}
+
+.pagination-container .btn {
+  margin-left: 10px;
+}
+
+.pagination-container .d-flex {
+  font-size: 14px;
+}
+
+/* Styling for modals */
+.modal-content {
+  padding: 20px;
+}
+
+.modal-header {
+  background-color: #f8f9fa;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.dropdown-menu {
+  min-width: 150px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 767px) {
+  .input-group input, .btn {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .pagination-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

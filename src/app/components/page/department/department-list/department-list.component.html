@@ -1,51 +1,39 @@
-<div class="rounded-4 w-100 h-100" style="position: relative">
+<div class="rounded-4 w-100 h-100 d-flex flex-column" style="position: relative">
+  <div class="h-20 w-100">
   <div class="fs-4 fw-bold mb-2">{{ "DEPARTMENT" | translate }}</div>
-  <div class="mb-2 d-flex justify-content-between">
-    <div class="col-md-5">
-      <div class="input-group">
-        <input
-          class="form-control border"
-          #searchInput
-          style="border-radius: 0.375rem"
-          type="search"
-          placeholder="Search"
-        />
-        <span class="input-group-append">
-          <button
-            class="btn hvnone btn-outline-secondary bg-white border-start-0 border ms-n5"
-            style="
-              border-radius: 0 0.375rem 0.375rem 0;
-              transform: translateX(-97%);
-            "
-            type="button"
-          >
-            <i class="bi bi-search"></i>
-          </button>
-        </span>
-      </div>
+  
+  <div class="mb-2 d-flex flex-column flex-md-row justify-content-between">
+    <div class="col-12 col-md-5">
+      <app-search-input
+      [placeholder]="'SEARCH' | translate"
+      (search)="onKeywordChange($event)">
+    </app-search-input>
     </div>
 
-    <div>
+    <div class="mt-2 mt-md-0">
       <button
         type="button"
         class="me-2 btn btn-primary"
         data-bs-toggle="modal"
         *ngIf="authService.checkPermissions('CREATE_DEPARTMENT')"
-        data-bs-target="#csvUploadModal"
+        data-bs-target="#departmentUploadModal"
       >
         {{ "ADD_BY_XLSX" | translate }}
       </button>
       <button
         type="button"
         *ngIf="authService.checkPermissions('CREATE_DEPARTMENT')"
-        class="btn btn-primary me-4"
+        class="btn btn-primary"
         (click)="navigateAddDepartment()"
       >
         {{ "ADD_DEPARTMENT" | translate }}
       </button>
     </div>
   </div>
-  <div class="rounded-4 me-4" style="overflow: hidden; height: 400px">
+</div>
+
+  
+  <div class="rounded-4 w-100 h-75" style="overflow: hidden;">
     <div class="table-responsive mh-75" style="overflow-y: auto">
       <table class="table table-hover table-borderless align-middle">
         <thead class="table-light">
@@ -69,14 +57,14 @@
                   class="me-2 cursor-pointer"
                   (click)="openDepartmentModal(department)"
                 >
-                <img src="assets/icons/eye.svg" alt="Arrow" />
+                  <img src="assets/icons/eye.svg" alt="Arrow" />
                 </div>
                 <div
                   class="me-2 cursor-pointer"
                   *ngIf="authService.checkPermissions('UPDATE_DEPARTMENT')"
                   (click)="editDepartment(department)"
                 >
-                <img src="assets/icons/pen.svg" alt="Arrow" />
+                  <img src="assets/icons/pen.svg" alt="Arrow" />
                 </div>
                 <div
                   class="cursor-pointer"
@@ -84,7 +72,7 @@
                   *ngIf="authService.checkPermissions('DELETE_DEPARTMENT')"
                   (click)="openDeleteModal(department.id)"
                 >
-                <img src="assets/icons/bin.svg" alt="Arrow" />
+                  <img src="assets/icons/bin.svg" alt="Arrow" />
                 </div>
               </div>
             </td>
@@ -93,9 +81,10 @@
       </table>
     </div>
   </div>
+  
   <div
-    class="pagination-container d-flex w-100 justify-content-between"
-    style="position: absolute; bottom: 0; padding: 10px 10px 0 0"
+    class="pagination-container d-flex w-100 justify-content-between position-md-absolute"
+    style=" bottom: 0; padding: 10px 10px 0 0"
   >
     <div class="d-flex align-items-center">
       {{"TOTAL_RECORD_COUNT" | translate}}: {{ totalRecords }}
@@ -109,59 +98,16 @@
     />
   </div>
 </div>
-<div
-  class="modal fade"
-  id="deleteModal"
-  tabindex="-1"
-  aria-labelledby="deleteModalLabel"
-  aria-hidden="true"
->
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="deleteModalLabel">{{"COMFIRM_DELETE" | translate}}</h5>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
-      </div>
-      <div class="modal-body">{{"DELETE_ITEM" | translate}}</div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-          {{"NO" | translate}}
-        </button>
-        <button type="button" class="btn btn-danger" (click)="confirmDelete()">
-          {{"YES" | translate}}
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
 
-<div
-  class="modal fade"
-  id="departmentModal"
-  tabindex="-1"
-  aria-labelledby="departmentModalLabel"
-  aria-hidden="true"
->
-  <div class="modal-dialog modal-dialog-centered">
+<!-- Department Modal -->
+<div class="modal fade" id="departmentModal" tabindex="-1" aria-labelledby="departmentModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="departmentModalLabel">
-          {{ selectedDepartment?.name }}
-        </h5>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
+        <h5 class="modal-title" id="departmentModalLabel">{{ selectedDepartment?.name }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body text-center">
-        <!-- Hiển thị logo của phòng ban -->
         <div class="d-flex justify-content-center mb-3">
           <img
             [src]="selectedDepartment?.urlLogo"
@@ -170,7 +116,6 @@
             style="width: 100px; height: 100px; object-fit: cover"
           />
         </div>
-        <!-- Hiển thị tên của phòng ban -->
         <h5 class="fw-bold">{{ selectedDepartment?.name }}</h5>
       </div>
       <div class="modal-footer">
@@ -182,73 +127,20 @@
   </div>
 </div>
 
-<div
-  class="modal fade"
-  id="csvUploadModal"
-  tabindex="-1"
-  aria-labelledby="csvUploadModalLabel"
-  aria-hidden="true"
->
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="csvUploadModalLabel">
-          {{"UPLOAD_FILE_FOR_DEPARTMENT" | translate}}
-        </h5>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
-      </div>
-      <div class="modal-body text-center">
-        <!-- Nút tải file mẫu CSV -->
-        <button
-          class="btn btn-outline-secondary mb-3"
-          (click)="downloadCSVTemplate()"
-        >
-          {{ "DOWNLOAD_SAMPLE_XLSX" | translate }}
-        </button>
+<app-upload-modal
+  modalId="departmentUploadModal"
+  [title]="'UPLOAD_FILE_FOR_DEPARTMENT' | translate"
+  [templateUrl]="'http://localhost:8000/AMQNU/api/departments/download-template'"
+  [uploadFn]="uploadDepartment"
+  (finished)="loadDepartments({ page: page, rows: rows })">
+</app-upload-modal>
 
-        <!-- Vùng kéo thả file hoặc chọn file -->
-        <div
-          class="file-upload-area border rounded p-3"
-          (dragover)="onDragOver($event)"
-          (drop)="onDrop($event)"
-          (click)="fileInput.click()"
-        >
-          <input
-            #fileInput
-            type="file"
-            (change)="onFileSelected($event)"
-            accept=".xlsx"
-            class="form-control-file"
-            style="display: none"
-          />
-          <p class="mt-3">
-           {{"DRAG_DROP_FILE" | translate}}
-          </p>
 
-          <!-- Hiển thị tên file khi đã chọn hoặc thả -->
-          <div *ngIf="fileName" class="mt-2">
-            <strong>{{"SELECTED_FILE" | translate}}</strong> {{ fileName }}
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-          {{ "CLOSE" | translate }}
-        </button>
-        <button
-          type="button"
-          class="btn btn-primary"
-          (click)="uploadCSVFile()"
-          [disabled]="!selectedFile"
-        >
-          {{ "UPLOAD" | translate }}
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
+<app-confirm-delete-modal
+  modalId="deleteModal"
+  [title]="'CONFIRM_DELETE' | translate"
+  [message]="'DELETE_ITEM' | translate"
+  [itemId]="itemIdToDelete"
+  [deleteFn]="deleteDepartment"  
+  (done)="loadDepartments({ page: page, rows: rows })">
+</app-confirm-delete-modal>
