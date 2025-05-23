@@ -18,7 +18,9 @@
         </button>
 
         <div class="file-upload-area border rounded p-3"
+            
              (dragover)="onDragOver($event)"
+              (dragleave)="onDragLeave($event)"
              (drop)="onDrop($event)"
              (click)="fileInput.click()">
           <input #fileInput type="file" accept=".xlsx" hidden

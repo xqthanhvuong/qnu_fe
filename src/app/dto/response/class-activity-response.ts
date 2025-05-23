@@ -4,6 +4,7 @@ export interface ClassActivityResponse {
     classId: number;
     className: string;
     leader: string;
+    activityView: string;
     activityTime: string;
     status: string;
     createdAt: string;

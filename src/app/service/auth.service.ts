@@ -1,8 +1,8 @@
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { map, tap } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
 import { DOCUMENT } from '@angular/common';
 import { enviroment } from '../../environments/environment';
 
@@ -50,13 +50,27 @@ export class AuthService {
     );
   }
 
-  logout(): void {
+  clearSession(): void {
     this.deleteCookie(this.tokenKey);
     this.loggedIn.next(false);
     this.userName.next('');
     this.role.next('');
     this.userRole = '';
     this.permissions = [];
+  }
+
+   logout(): Observable<any> {
+    return this.http.post<any>(enviroment.apiURL + 'auth/log-out', {}).pipe(
+      tap((response) => {
+        if (response.code === 200) {
+          this.clearSession(); 
+        }
+      }),
+      catchError(()=>{
+        this.clearSession();
+        return of(null)
+      })
+    );
   }
 
   public checkToken(): void {
@@ -69,7 +83,7 @@ export class AuthService {
       this.role.next(payload?.role || '');
       this.permissions = payload?.permission || [];
     } else {
-      this.logout();
+      this.clearSession();
     }
   }
 

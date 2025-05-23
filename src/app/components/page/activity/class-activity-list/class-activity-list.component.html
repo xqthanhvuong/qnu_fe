@@ -59,6 +59,7 @@
             <th>{{"CLASS_NAME" | translate}}</th>
             <th>{{"LEADER" | translate}}</th>
             <th>{{"ACTIVITY_TIME" | translate}}</th>
+            <th>{{"ACTIVITY_VIEW" | translate}}</th>
             <th>{{"STATUS" | translate}}</th>
             <th>{{"ACTION" | translate}}</th>
           </tr>
@@ -68,6 +69,7 @@
             <td>{{ item.className }}</td>
             <td>{{ item.leader }}</td>
             <td>{{ item.activityTime | date : "short" }}</td>
+            <td>{{ item.activityView }}</td>
             <td>
               <p-tag
                 [value]="item.status"

@@ -55,6 +55,10 @@ export class UploadModalComponent {
     e.preventDefault(); e.stopPropagation();
     (e.currentTarget as HTMLElement).classList.add('drag-over');
   }
+  onDragLeave(e: DragEvent) {
+    e.preventDefault(); e.stopPropagation();
+    (e.currentTarget as HTMLElement).classList.remove('drag-over');
+  }
   onDrop(e: DragEvent) {
     e.preventDefault(); e.stopPropagation();
     (e.currentTarget as HTMLElement).classList.remove('drag-over');

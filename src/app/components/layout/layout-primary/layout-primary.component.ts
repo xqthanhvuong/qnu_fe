@@ -93,8 +93,11 @@ export class LayoutPrimaryComponent implements OnInit, OnDestroy {
   }
 
   logout(): void {
-    this.authService.logout();
-    this.router.navigate(['/login']);
+    this.authService.logout().subscribe(()=>{
+      if(isPlatformBrowser(this.platformId)){
+        this.router.navigate(['/login']);
+      }
+    });
   }
 
   ngOnDestroy(): void {
